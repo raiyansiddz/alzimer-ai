@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "next": "التالي",
+    "previous": "السابق",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "close": "إغلاق",
+    "select": "اختيار",
+    "language": "اللغة",
+    "age": "العمر",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "tests": "الاختبارات",
+    "reports": "التقارير",
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "login": "تسجيل الدخول",
+    "register": "التسجيل"
+  },
+  "auth": {
+    "login_title": "مرحباً بعودتك",
+    "register_title": "إنشاء حساب",
+    "full_name": "الاسم الكامل",
+    "email_address": "عنوان البريد الإلكتروني",
+    "education_level": "مستوى التعليم",
+    "vision_status": "حالة الرؤية",
+    "language_preference": "تفضيل اللغة",
+    "register_button": "التسجيل",
+    "login_button": "تسجيل الدخول",
+    "already_have_account": "هل لديك حساب بالفعل؟",
+    "dont_have_account": "ليس لديك حساب؟"
+  },
+  "home": {
+    "title": "نظام كشف الخرف",
+    "subtitle": "منصة تقييم معرفي شاملة مع تحليل مدعوم بالذكاء الاصطناعي",
+    "get_started": "ابدأ"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "common": {
+    "loading": "ऑपरेशन ते आहे...",
+    "error": "त्रुटी",
+    "success": "यश",
+    "submit": "सबमिट करा",
+    "cancel": "रद्द करा",
+    "next": "पुढे",
+    "previous": "मागे",
+    "save": "सेव्ह करा",
+    "delete": "डिलीट करा",
+    "edit": "संपादित करा",
+    "view": "पहा",
+    "close": "बंद करा",
+    "select": "निवडा",
+    "language": "भाषा",
+    "age": "वय",
+    "name": "नाव",
+    "email": "ईमेल"
+  },
+  "navigation": {
+    "home": "मुख्यपृष्ठ",
+    "dashboard": "डॅशबोर्ड",
+    "tests": "चाचण्या",
+    "reports": "अहवाल",
+    "profile": "प्रोफाइल",
+    "logout": "लॉग आउट",
+    "login": "लॉग इन",
+    "register": "नोंदणी"
+  },
+  "auth": {
+    "login_title": "पुन्हा स्वागत",
+    "register_title": "खाते तयार करा",
+    "full_name": "पूर्ण नाव",
+    "email_address": "ईमेल पत्ता",
+    "education_level": "शिक्षण स्तर",
+    "vision_status": "दृष्टी स्थिती",
+    "language_preference": "भाषा प्राधान्य",
+    "register_button": "नोंदणी करा",
+    "login_button": "लॉग इन करा",
+    "already_have_account": "तुमचे आधीच खाते आहे का?",
+    "dont_have_account": "तुमचे खाते नाही का?"
+  },
+  "home": {
+    "title": "स्मृतिभ्रंश निदान प्रणाली",
+    "subtitle": "AI-संचालित विश्लेषणासह सर्वसमावेशक संज्ञानात्मक मूल्यांकन मंच",
+    "get_started": "सुरुवात करा"
+  },
+  "dashboard": {
+    "welcome": "परत स्वागत",
+    "start_new_test": "नवीन चाचणी सुरू करा",
+    "view_reports": "अहवाल पहा",
+    "no_tests": "अद्याप कोणत्याही चाचण्या पूर्ण झाल्या नाहीत"
+  }
+}

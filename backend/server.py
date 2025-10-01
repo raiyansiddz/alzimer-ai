@@ -8,6 +8,7 @@ load_dotenv()
 
 # Import routers
 from api.v1.endpoints import auth, users, test_sessions, cognitive_tests, speech_tests, behavioral_tests, reports, progress
+from api.v1.endpoints import enhanced_cognitive_tests, enhanced_speech_tests
 from core.database.connection import engine, Base
 
 @asynccontextmanager
@@ -47,7 +48,9 @@ app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(test_sessions.router, prefix="/api/test-sessions", tags=["test-sessions"])
 app.include_router(cognitive_tests.router, prefix="/api/cognitive-tests", tags=["cognitive-tests"])
+app.include_router(enhanced_cognitive_tests.router, prefix="/api/cognitive-tests", tags=["enhanced-cognitive-tests"])
 app.include_router(speech_tests.router, prefix="/api/speech-tests", tags=["speech-tests"])
+app.include_router(enhanced_speech_tests.router, prefix="/api/speech-tests", tags=["enhanced-speech-tests"])
 app.include_router(behavioral_tests.router, prefix="/api/behavioral-tests", tags=["behavioral-tests"])
 app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
 app.include_router(progress.router, prefix="/api/progress", tags=["progress"])

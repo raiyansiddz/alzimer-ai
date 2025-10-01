@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "submit": "Absenden",
+    "cancel": "Abbrechen",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "view": "Anzeigen",
+    "close": "Schließen",
+    "select": "Auswählen",
+    "language": "Sprache",
+    "age": "Alter",
+    "name": "Name",
+    "email": "Email"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "tests": "Tests",
+    "reports": "Berichte",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "register": "Registrieren"
+  },
+  "auth": {
+    "login_title": "Willkommen zurück",
+    "register_title": "Konto erstellen",
+    "full_name": "Vollständiger Name",
+    "email_address": "E-Mail-Adresse",
+    "education_level": "Bildungsstand",
+    "vision_status": "Sehstatus",
+    "language_preference": "Sprachpräferenz",
+    "register_button": "Registrieren",
+    "login_button": "Anmelden",
+    "already_have_account": "Haben Sie bereits ein Konto?",
+    "dont_have_account": "Haben Sie kein Konto?"
+  },
+  "home": {
+    "title": "Demenz-Erkennungssystem",
+    "subtitle": "Umfassende kognitive Bewertungsplattform mit KI-Analyse",
+    "get_started": "Loslegen"
+  }
+}

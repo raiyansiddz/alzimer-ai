@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "লোড হচ্ছে...",
+    "error": "ত্রুটি",
+    "success": "সফলতা",
+    "submit": "জমা দিন",
+    "cancel": "বাতিল করুন",
+    "next": "পরবর্তী",
+    "previous": "পূর্ববর্তী",
+    "save": "সংরক্ষণ করুন",
+    "delete": "মুছে ফেলুন",
+    "edit": "সম্পাদনা করুন",
+    "view": "দেখুন",
+    "close": "বন্ধ করুন",
+    "select": "নির্বাচন করুন",
+    "language": "ভাষা",
+    "age": "বয়স",
+    "name": "নাম",
+    "email": "ইমেইল"
+  },
+  "navigation": {
+    "home": "হোম",
+    "dashboard": "ড্যাশবোর্ড",
+    "tests": "পরীক্ষা",
+    "reports": "রিপোর্ট",
+    "profile": "প্রোফাইল",
+    "logout": "লগ আউট",
+    "login": "লগ ইন",
+    "register": "নিবন্ধন"
+  },
+  "auth": {
+    "login_title": "আবার স্বাগতম",
+    "register_title": "অ্যাকাউন্ট তৈরি করুন",
+    "full_name": "পূর্ণ নাম",
+    "email_address": "ইমেইল ঠিকানা",
+    "education_level": "শিক্ষার স্তর",
+    "vision_status": "দৃষ্টি অবস্থা",
+    "language_preference": "ভাষার পছন্দ",
+    "register_button": "নিবন্ধন করুন",
+    "login_button": "লগ ইন করুন",
+    "already_have_account": "আপনার কি ইতিমধ্যে অ্যাকাউন্ট আছে?",
+    "dont_have_account": "আপনার কোন অ্যাকাউন্ট নেই?"
+  },
+  "home": {
+    "title": "ডিমেনশিয়া সনাক্তকরণ সিস্টেম",
+    "subtitle": "AI-চালিত বিশ্লেষণ সহ ব্যাপক জ্ঞানমূলক মূল্যায়ন প্ল্যাটফর্ম",
+    "get_started": "শুরু করুন"
+  }
+}

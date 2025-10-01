@@ -1,0 +1,144 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "next": "Next",
+    "previous": "Previous",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "select": "Select",
+    "language": "Language",
+    "age": "Age",
+    "name": "Name",
+    "email": "Email"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard", 
+    "tests": "Tests",
+    "reports": "Reports",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "register_title": "Create Account",
+    "full_name": "Full Name",
+    "email_address": "Email Address",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "education_level": "Education Level",
+    "vision_status": "Vision Status",
+    "language_preference": "Language Preference",
+    "register_button": "Register",
+    "login_button": "Login",
+    "already_have_account": "Already have an account?",
+    "dont_have_account": "Don't have an account?",
+    "education_options": {
+      "non_educated": "Non-Educated",
+      "primary": "Primary",
+      "secondary": "Secondary", 
+      "graduate": "Graduate",
+      "postgraduate": "Postgraduate"
+    },
+    "vision_options": {
+      "normal": "Normal",
+      "weak_vision": "Weak Vision",
+      "blind": "Blind"
+    }
+  },
+  "home": {
+    "title": "Dementia Detection System",
+    "subtitle": "Comprehensive cognitive assessment platform with AI-powered analysis",
+    "get_started": "Get Started",
+    "features": {
+      "accessibility": {
+        "title": "For All Users",
+        "description": "Accessible interfaces for blind, weak vision, non-educated, and educated users"
+      },
+      "comprehensive": {
+        "title": "Comprehensive Tests",
+        "description": "Cognitive, speech, and behavioral assessments tailored to your needs"
+      },
+      "progress": {
+        "title": "Track Progress",
+        "description": "Monitor cognitive health over time with detailed reports and visualizations"
+      }
+    },
+    "cta": {
+      "title": "Ready to Begin?",
+      "description": "Create your account and start your cognitive health journey today",
+      "register_now": "Register Now"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "overview": "Overview",
+    "recent_tests": "Recent Tests",
+    "next_assessment": "Next Assessment",
+    "progress_summary": "Progress Summary",
+    "quick_actions": "Quick Actions",
+    "start_new_test": "Start New Test",
+    "view_reports": "View Reports",
+    "update_profile": "Update Profile",
+    "no_tests": "No tests completed yet",
+    "schedule_first_test": "Schedule your first cognitive assessment"
+  },
+  "tests": {
+    "available_tests": "Available Tests",
+    "test_history": "Test History",
+    "start_test": "Start Test",
+    "continue_test": "Continue Test",
+    "test_complete": "Test Complete",
+    "cognitive_tests": "Cognitive Tests",
+    "speech_tests": "Speech Tests",
+    "behavioral_tests": "Behavioral Tests",
+    "test_types": {
+      "avlt": "Auditory Verbal Learning Test",
+      "mmse": "Mini-Mental State Examination",
+      "moca": "Montreal Cognitive Assessment",
+      "digit_span": "Digit Span Test",
+      "clock_drawing": "Clock Drawing Test",
+      "verbal_fluency": "Verbal Fluency Test",
+      "trail_making": "Trail Making Test"
+    },
+    "duration": "Duration",
+    "minutes": "minutes",
+    "domains": "Cognitive Domains"
+  },
+  "speech": {
+    "record_instruction": "Click the microphone to start recording",
+    "recording": "Recording...",
+    "stop_recording": "Stop Recording",
+    "upload_audio": "Upload Audio File",
+    "transcription": "Transcription",
+    "analysis": "Speech Analysis",
+    "fluency_score": "Fluency Score",
+    "coherence_score": "Coherence Score",
+    "recommendations": "Recommendations"
+  },
+  "reports": {
+    "my_reports": "My Reports",
+    "generate_report": "Generate Report",
+    "download_report": "Download Report",
+    "report_date": "Report Date",
+    "test_session": "Test Session",
+    "overall_score": "Overall Score",
+    "risk_level": "Risk Level",
+    "risk_levels": {
+      "low": "Low Risk",
+      "mild": "Mild Risk", 
+      "moderate": "Moderate Risk",
+      "high": "High Risk",
+      "severe": "Severe Risk"
+    }
+  }
+}

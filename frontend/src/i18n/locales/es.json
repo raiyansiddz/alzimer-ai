@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "close": "Cerrar",
+    "select": "Seleccionar",
+    "language": "Idioma",
+    "age": "Edad",
+    "name": "Nombre",
+    "email": "Email"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "tests": "Pruebas",
+    "reports": "Informes",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse"
+  },
+  "auth": {
+    "login_title": "Bienvenido de Nuevo",
+    "register_title": "Crear Cuenta",
+    "full_name": "Nombre Completo",
+    "email_address": "Dirección de Email",
+    "education_level": "Nivel de Educación",
+    "vision_status": "Estado de Visión",
+    "language_preference": "Preferencia de Idioma",
+    "register_button": "Registrarse",
+    "login_button": "Iniciar Sesión",
+    "already_have_account": "¿Ya tienes una cuenta?",
+    "dont_have_account": "¿No tienes cuenta?"
+  },
+  "home": {
+    "title": "Sistema de Detección de Demencia",
+    "subtitle": "Plataforma de evaluación cognitiva integral con análisis impulsado por IA",
+    "get_started": "Comenzar"
+  }
+}

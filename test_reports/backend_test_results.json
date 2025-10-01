@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-10-01T22:46:05.085786",
+  "total_tests": 9,
+  "passed_tests": 9,
+  "success_rate": 100.0,
+  "detailed_results": [
+    {
+      "name": "Health Check",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:03.551725"
+    },
+    {
+      "name": "User Registration",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:03.566111"
+    },
+    {
+      "name": "Create Test Session",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:03.580724"
+    },
+    {
+      "name": "Available Cognitive Tests",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:03.582241"
+    },
+    {
+      "name": "Submit Cognitive Test",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:05.075385"
+    },
+    {
+      "name": "Available Speech Tests",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:05.077040"
+    },
+    {
+      "name": "Get User Profile",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:05.080069"
+    },
+    {
+      "name": "Get Test Sessions",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:05.082919"
+    },
+    {
+      "name": "Get Reports",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-01T22:46:05.085630"
+    }
+  ]
+}

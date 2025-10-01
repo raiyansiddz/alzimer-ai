@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "error": "ભૂલ",
+    "success": "સફળતા",
+    "submit": "સબમિટ કરો",
+    "cancel": "રદ કરો",
+    "next": "આગળ",
+    "previous": "પાછળ",
+    "save": "સેવ કરો",
+    "delete": "ડિલીટ કરો",
+    "edit": "એડિટ કરો",
+    "view": "જુઓ",
+    "close": "બંધ કરો",
+    "select": "પસંદ કરો",
+    "language": "ભાષા",
+    "age": "ઉંમર",
+    "name": "નામ",
+    "email": "ઈમેઈલ"
+  },
+  "navigation": {
+    "home": "હોમ",
+    "dashboard": "ડેશબોર્ડ",
+    "tests": "ટેસ્ટ",
+    "reports": "રિપોર્ટ",
+    "profile": "પ્રોફાઈલ",
+    "logout": "લોગ આઉટ",
+    "login": "લોગ ઇન",
+    "register": "રજિસ્ટર"
+  },
+  "auth": {
+    "login_title": "પાછા સ્વાગત છે",
+    "register_title": "એકાઉન્ટ બનાવો",
+    "full_name": "પૂરું નામ",
+    "email_address": "ઈમેઈલ સરનામું",
+    "education_level": "શિક્ષણ સ્તર",
+    "vision_status": "દ્રષ્ટિ સ્થિતિ",
+    "language_preference": "ભાષા પસંદગી",
+    "register_button": "રજિસ્ટર કરો",
+    "login_button": "લોગ ઇન કરો",
+    "already_have_account": "શું તમારું પહેલેથી એકાઉન્ટ છે?",
+    "dont_have_account": "શું તમારું એકાઉન્ટ નથી?"
+  },
+  "home": {
+    "title": "ડિમેન્શિયા ડિટેક્શન સિસ્ટમ",
+    "subtitle": "AI-સંચાલિત વિશ્લેષણ સાથે વ્યાપક સંજ્ઞાનાત્મક મૂલ્યાંકન પ્લેટફોર્મ",
+    "get_started": "શરૂ કરો"
+  }
+}

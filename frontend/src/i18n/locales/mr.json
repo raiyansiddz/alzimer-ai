@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "submit": "सबमिट करें",
+    "cancel": "रद्द करें",
+    "next": "आगे",
+    "previous": "पिछला",
+    "save": "सेव करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "view": "देखें",
+    "close": "बंद करें",
+    "select": "चुनें",
+    "language": "भाषा",
+    "age": "उम्र",
+    "name": "नाम",
+    "email": "ईमेल"
+  },
+  "navigation": {
+    "home": "होम",
+    "dashboard": "डैशबोर्ड",
+    "tests": "टेस्ट",
+    "reports": "रिपोर्ट",
+    "profile": "प्रोफाइल",
+    "logout": "लॉग आउट",
+    "login": "लॉग इन",
+    "register": "रजिस्टर"
+  },
+  "auth": {
+    "login_title": "वापस स्वागत है",
+    "register_title": "खाता बनाएं",
+    "full_name": "पूरा नाम",
+    "email_address": "ईमेल पता",
+    "education_level": "शिक्षा स्तर",
+    "vision_status": "दृष्टि स्थिति",
+    "language_preference": "भाषा प्राथमिकता",
+    "register_button": "रजिस्टर करें",
+    "login_button": "लॉग इन करें",
+    "already_have_account": "क्या आपका पहले से खाता है?",
+    "dont_have_account": "क्या आपका खाता नहीं है?"
+  },
+  "home": {
+    "title": "डिमेंशिया डिटेक्शन सिस्टम",
+    "subtitle": "AI-संचालित विश्लेषण के साथ व्यापक संज्ञानात्मक मूल्यांकन प्लेटफॉर्म",
+    "get_started": "शुरू करें"
+  }
+}

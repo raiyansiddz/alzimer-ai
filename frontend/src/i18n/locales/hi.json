@@ -1,0 +1,132 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "submit": "जमा करें",
+    "cancel": "रद्द करें",
+    "next": "आगे",
+    "previous": "पिछला",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "view": "देखें",
+    "close": "बंद करें",
+    "select": "चुनें",
+    "language": "भाषा",
+    "age": "उम्र",
+    "name": "नाम",
+    "email": "ईमेल"
+  },
+  "navigation": {
+    "home": "मुख्य पृष्ठ",
+    "dashboard": "डैशबोर्ड",
+    "tests": "परीक्षण",
+    "reports": "रिपोर्ट",
+    "profile": "प्रोफ़ाइल",
+    "logout": "लॉग आउट",
+    "login": "लॉग इन",
+    "register": "पंजीकरण"
+  },
+  "auth": {
+    "login_title": "वापस स्वागत है",
+    "register_title": "खाता बनाएं",
+    "full_name": "पूरा नाम",
+    "email_address": "ईमेल पता",
+    "password": "पासवर्ड",
+    "confirm_password": "पासवर्ड की पुष्टि करें",
+    "education_level": "शिक्षा स्तर",
+    "vision_status": "दृष्टि स्थिति",
+    "language_preference": "भाषा प्राथमिकता",
+    "register_button": "पंजीकरण करें",
+    "login_button": "लॉग इन करें",
+    "already_have_account": "क्या आपका पहले से खाता है?",
+    "dont_have_account": "क्या आपका खाता नहीं है?",
+    "education_options": {
+      "non_educated": "अशिक्षित",
+      "primary": "प्राथमिक",
+      "secondary": "माध्यमिक",
+      "graduate": "स्नातक",
+      "postgraduate": "स्नातकोत्तर"
+    },
+    "vision_options": {
+      "normal": "सामान्य",
+      "weak_vision": "कमजोर दृष्टि",
+      "blind": "अंधा"
+    }
+  },
+  "home": {
+    "title": "मनोभ्रंश निदान प्रणाली",
+    "subtitle": "AI-संचालित विश्लेषण के साथ व्यापक संज्ञानात्मक मूल्यांकन मंच",
+    "get_started": "शुरू करें",
+    "features": {
+      "accessibility": {
+        "title": "सभी उपयोगकर्ताओं के लिए",
+        "description": "अंधे, कमजोर दृष्टि, अशिक्षित और शिक्षित उपयोगकर्ताओं के लिए सुलभ इंटरफेस"
+      },
+      "comprehensive": {
+        "title": "व्यापक परीक्षण",
+        "description": "आपकी आवश्यकताओं के अनुकूल संज्ञानात्मक, वाणी और व्यवहारिक मूल्यांकन"
+      },
+      "progress": {
+        "title": "प्रगति ट्रैक करें",
+        "description": "विस्तृत रिपोर्ट और विज़ुअलाइज़ेशन के साथ समय के साथ संज्ञानात्मक स्वास्थ्य की निगरानी करें"
+      }
+    },
+    "cta": {
+      "title": "शुरू करने के लिए तैयार हैं?",
+      "description": "अपना खाता बनाएं और आज ही अपनी संज्ञानात्मक स्वास्थ्य यात्रा शुरू करें",
+      "register_now": "अभी पंजीकरण करें"
+    }
+  },
+  "dashboard": {
+    "welcome": "वापस स्वागत है",
+    "overview": "अवलोकन",
+    "recent_tests": "हाल के परीक्षण",
+    "next_assessment": "अगला मूल्यांकन",
+    "progress_summary": "प्रगति सारांश",
+    "quick_actions": "त्वरित क्रियाएं",
+    "start_new_test": "नया परीक्षण शुरू करें",
+    "view_reports": "रिपोर्ट देखें",
+    "update_profile": "प्रोफ़ाइल अपडेट करें",
+    "no_tests": "अभी तक कोई परीक्षण पूरा नहीं हुआ",
+    "schedule_first_test": "अपना पहला संज्ञानात्मक मूल्यांकन शेड्यूल करें"
+  },
+  "tests": {
+    "available_tests": "उपलब्ध परीक्षण",
+    "test_history": "परीक्षण इतिहास",
+    "start_test": "परीक्षण शुरू करें",
+    "continue_test": "परीक्षण जारी रखें",
+    "test_complete": "परीक्षण पूर्ण",
+    "cognitive_tests": "संज्ञानात्मक परीक्षण",
+    "speech_tests": "वाणी परीक्षण",
+    "behavioral_tests": "व्यवहारिक परीक्षण"
+  },
+  "speech": {
+    "record_instruction": "रिकॉर्डिंग शुरू करने के लिए माइक्रोफोन पर क्लिक करें",
+    "recording": "रिकॉर्डिंग...",
+    "stop_recording": "रिकॉर्डिंग रोकें",
+    "upload_audio": "ऑडियो फ़ाइल अपलोड करें",
+    "transcription": "ट्रांसक्रिप्शन",
+    "analysis": "वाणी विश्लेषण",
+    "fluency_score": "प्रवाह स्कोर",
+    "coherence_score": "सुसंगतता स्कोर",
+    "recommendations": "सुझाव"
+  },
+  "reports": {
+    "my_reports": "मेरी रिपोर्टें",
+    "generate_report": "रिपोर्ट जनरेट करें",
+    "download_report": "रिपोर्ट डाउनलोड करें",
+    "report_date": "रिपोर्ट दिनांक",
+    "test_session": "परीक्षण सत्र",
+    "overall_score": "समग्र स्कोर",
+    "risk_level": "जोखिम स्तर",
+    "risk_levels": {
+      "low": "कम जोखिम",
+      "mild": "हल्का जोखिम",
+      "moderate": "मध्यम जोखिम", 
+      "high": "उच्च जोखिम",
+      "severe": "गंभीर जोखिम"
+    }
+  }
+}

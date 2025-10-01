@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "close": "Fermer",
+    "select": "Sélectionner",
+    "language": "Langue",
+    "age": "Âge",
+    "name": "Nom",
+    "email": "Email"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de Bord",
+    "tests": "Tests",
+    "reports": "Rapports",
+    "profile": "Profil",
+    "logout": "Se Déconnecter",
+    "login": "Se Connecter",
+    "register": "S'inscrire"
+  },
+  "auth": {
+    "login_title": "Bon Retour",
+    "register_title": "Créer un Compte",
+    "full_name": "Nom Complet",
+    "email_address": "Adresse Email",
+    "education_level": "Niveau d'Éducation",
+    "vision_status": "État de Vision",
+    "language_preference": "Préférence de Langue",
+    "register_button": "S'inscrire",
+    "login_button": "Se Connecter",
+    "already_have_account": "Vous avez déjà un compte ?",
+    "dont_have_account": "Vous n'avez pas de compte ?"
+  },
+  "home": {
+    "title": "Système de Détection de Démence",
+    "subtitle": "Plateforme d'évaluation cognitive complète avec analyse IA",
+    "get_started": "Commencer"
+  }
+}
