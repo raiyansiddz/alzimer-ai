@@ -9,9 +9,13 @@ logger = logging.getLogger(__name__)
 class SupabaseService:
     def __init__(self):
         try:
-            self.supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
-            self.storage_bucket = settings.SUPABASE_STORAGE_BUCKET
-            logger.info("Supabase client initialized successfully")
+            if settings.SUPABASE_URL and settings.SUPABASE_KEY:
+                self.supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+                self.storage_bucket = settings.SUPABASE_STORAGE_BUCKET
+                logger.info("Supabase client initialized successfully")
+            else:
+                logger.warning("Supabase credentials not provided, service disabled")
+                self.supabase = None
         except Exception as e:
             logger.error(f"Failed to initialize Supabase client: {e}")
             self.supabase = None

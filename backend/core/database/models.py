@@ -18,6 +18,7 @@ class User(Base):
     education_level = Column(String)
     vision_type = Column(String)
     language = Column(String, nullable=False, default='en')
+    role = Column(String, nullable=False, default='user')
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

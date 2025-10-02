@@ -55,9 +55,8 @@ async def generate_report(session_id: str, report_type: str, db: Session = Depen
         
         # Create report record
         report = Report(
-            id=str(uuid.uuid4()),
-            user_id=session.user_id,
-            session_id=session.id,
+            user_id=str(session.user_id),
+            session_id=str(session.id),
             report_type=report_type,
             file_url=file_path,
             summary=f"Report generated for {session.session_type} session",
@@ -69,7 +68,17 @@ async def generate_report(session_id: str, report_type: str, db: Session = Depen
         db.commit()
         db.refresh(report)
         
-        return report
+        # Convert UUIDs to strings for response
+        return {
+            "id": str(report.id),
+            "user_id": str(report.user_id),
+            "session_id": str(report.session_id),
+            "report_type": report.report_type,
+            "file_url": report.file_url,
+            "summary": report.summary,
+            "recommendations": report.recommendations,
+            "created_at": report.created_at
+        }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
@@ -95,4 +104,15 @@ async def get_user_reports(user_id: str, db: Session = Depends(get_db)):
     Get all reports for a user
     """
     reports = db.query(Report).filter(Report.user_id == str(user_id)).order_by(Report.created_at.desc()).all()
-    return reports
+    
+    # Convert UUIDs to strings for response
+    return [{
+        "id": str(r.id),
+        "user_id": str(r.user_id),
+        "session_id": str(r.session_id),
+        "report_type": r.report_type,
+        "file_url": r.file_url,
+        "summary": r.summary,
+        "recommendations": r.recommendations,
+        "created_at": r.created_at
+    } for r in reports]

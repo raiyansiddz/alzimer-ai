@@ -45,7 +45,6 @@ async def create_test_session(session_data: TestSessionCreate, db: Session = Dep
         raise HTTPException(status_code=404, detail="User not found")
     
     new_session = TestSession(
-        id=str(uuid.uuid4()),
         user_id=str(session_data.user_id),
         session_type=session_data.session_type,
         status="in_progress",
@@ -56,7 +55,18 @@ async def create_test_session(session_data: TestSessionCreate, db: Session = Dep
     db.commit()
     db.refresh(new_session)
     
-    return new_session
+    # Convert UUIDs to strings for response
+    return {
+        "id": str(new_session.id),
+        "user_id": str(new_session.user_id),
+        "session_type": new_session.session_type,
+        "status": new_session.status,
+        "started_at": new_session.started_at,
+        "completed_at": new_session.completed_at,
+        "overall_score": new_session.overall_score,
+        "overall_risk_level": new_session.overall_risk_level,
+        "next_recommended_date": new_session.next_recommended_date
+    }
 
 @router.get("/{session_id}", response_model=TestSessionResponse)
 async def get_test_session(session_id: str, db: Session = Depends(get_db)):
@@ -67,7 +77,18 @@ async def get_test_session(session_id: str, db: Session = Depends(get_db)):
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
     
-    return session
+    # Convert UUIDs to strings for response
+    return {
+        "id": str(session.id),
+        "user_id": str(session.user_id),
+        "session_type": session.session_type,
+        "status": session.status,
+        "started_at": session.started_at,
+        "completed_at": session.completed_at,
+        "overall_score": session.overall_score,
+        "overall_risk_level": session.overall_risk_level,
+        "next_recommended_date": session.next_recommended_date
+    }
 
 @router.get("/user/{user_id}", response_model=List[TestSessionResponse])
 async def get_user_sessions(user_id: str, db: Session = Depends(get_db)):
@@ -75,7 +96,19 @@ async def get_user_sessions(user_id: str, db: Session = Depends(get_db)):
     Get all sessions for a user
     """
     sessions = db.query(TestSession).filter(TestSession.user_id == str(user_id)).order_by(TestSession.started_at.desc()).all()
-    return sessions
+    
+    # Convert UUIDs to strings for response
+    return [{
+        "id": str(session.id),
+        "user_id": str(session.user_id),
+        "session_type": session.session_type,
+        "status": session.status,
+        "started_at": session.started_at,
+        "completed_at": session.completed_at,
+        "overall_score": session.overall_score,
+        "overall_risk_level": session.overall_risk_level,
+        "next_recommended_date": session.next_recommended_date
+    } for session in sessions]
 
 @router.put("/{session_id}", response_model=TestSessionResponse)
 async def update_test_session(session_id: str, session_data: TestSessionUpdate, db: Session = Depends(get_db)):
@@ -96,4 +129,15 @@ async def update_test_session(session_id: str, session_data: TestSessionUpdate, 
     db.commit()
     db.refresh(session)
     
-    return session
+    # Convert UUIDs to strings for response
+    return {
+        "id": str(session.id),
+        "user_id": str(session.user_id),
+        "session_type": session.session_type,
+        "status": session.status,
+        "started_at": session.started_at,
+        "completed_at": session.completed_at,
+        "overall_score": session.overall_score,
+        "overall_risk_level": session.overall_risk_level,
+        "next_recommended_date": session.next_recommended_date
+    }

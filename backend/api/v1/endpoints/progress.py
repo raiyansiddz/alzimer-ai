@@ -40,7 +40,17 @@ async def get_user_progress(user_id: str, db: Session = Depends(get_db)):
         ProgressTracking.user_id == str(user_id)
     ).order_by(ProgressTracking.date.desc()).all()
     
-    return progress
+    # Convert UUIDs to strings for response
+    return [{
+        "id": str(p.id),
+        "user_id": str(p.user_id),
+        "test_name": p.test_name,
+        "date": p.date,
+        "score": p.score,
+        "risk_level": p.risk_level,
+        "change_from_previous": p.change_from_previous,
+        "trend": p.trend
+    } for p in progress]
 
 @router.get("/user/{user_id}/comparison", response_model=List[ProgressComparisonResponse])
 async def get_progress_comparison(user_id: str, db: Session = Depends(get_db)):

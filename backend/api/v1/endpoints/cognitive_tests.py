@@ -108,7 +108,16 @@ async def submit_cognitive_test(test_data: CognitiveTestSubmit, db: Session = De
     db.commit()
     db.refresh(test_result)
     
-    return test_result
+    # Convert UUIDs to strings for response
+    return {
+        "id": str(test_result.id),
+        "session_id": str(test_result.session_id),
+        "test_name": test_result.test_name,
+        "score": test_result.score,
+        "max_score": test_result.max_score,
+        "risk_level": test_result.risk_level,
+        "analysis_result": test_result.analysis_result
+    }
 
 @router.get("/session/{session_id}", response_model=List[CognitiveTestResponse])
 async def get_session_cognitive_tests(session_id: str, db: Session = Depends(get_db)):
@@ -120,4 +129,13 @@ async def get_session_cognitive_tests(session_id: str, db: Session = Depends(get
         TestResult.test_type == "cognitive"
     ).all()
     
-    return results
+    # Convert UUIDs to strings for response
+    return [{
+        "id": str(result.id),
+        "session_id": str(result.session_id),
+        "test_name": result.test_name,
+        "score": result.score,
+        "max_score": result.max_score,
+        "risk_level": result.risk_level,
+        "analysis_result": result.analysis_result
+    } for result in results]
