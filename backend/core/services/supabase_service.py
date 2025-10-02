@@ -10,7 +10,11 @@ class SupabaseService:
     def __init__(self):
         try:
             if settings.SUPABASE_URL and settings.SUPABASE_KEY:
-                self.supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+                # Initialize Supabase client without problematic options
+                self.supabase: Client = create_client(
+                    settings.SUPABASE_URL, 
+                    settings.SUPABASE_KEY
+                )
                 self.storage_bucket = settings.SUPABASE_STORAGE_BUCKET
                 logger.info("Supabase client initialized successfully")
             else:
