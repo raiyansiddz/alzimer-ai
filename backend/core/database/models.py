@@ -1,11 +1,10 @@
 from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, Date, ForeignKey, Text, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 from core.database.connection import Base
-import json as jsonlib
 
-# SQLite compatible UUID type
 def generate_uuid():
     return str(uuid.uuid4())
 

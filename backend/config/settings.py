@@ -8,10 +8,12 @@ load_dotenv()
 class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
+    DIRECT_URL: str = os.getenv("DIRECT_URL", "")
     
     # Supabase
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")
+    SUPABASE_STORAGE_BUCKET: str = os.getenv("SUPABASE_STORAGE_BUCKET", "dementia")
     
     # Groq
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
