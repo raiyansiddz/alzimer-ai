@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0",
+  "description": "Audio assets manifest for Dementia Detection System",
+  "languages": [
+    "en", "hi", "hi-en", "ta", "te", "bn", "mr", "gu", "es", "fr", "de", "zh", "ar"
+  ],
+  "categories": {
+    "cognitive-tests": {
+      "description": "Voice files for cognitive assessments",
+      "files": [
+        "mmse-welcome.mp3",
+        "mmse-instruction.mp3", 
+        "orientation-time-instruction.mp3",
+        "orientation-place-instruction.mp3",
+        "registration-instruction.mp3",
+        "registration-words.mp3",
+        "attention-instruction.mp3",
+        "section-complete.mp3",
+        "test-complete.mp3",
+        "avlt-welcome.mp3",
+        "avlt-instruction.mp3",
+        "word-list-instruction.mp3",
+        "word-list-reading.mp3",
+        "recall-instruction.mp3",
+        "trial-complete.mp3",
+        "digit-span-welcome.mp3",
+        "forward-instruction.mp3",
+        "backward-instruction.mp3",
+        "sequence-prompt.mp3",
+        "repeat-instruction.mp3"
+      ]
+    },
+    "speech-tests": {
+      "description": "Voice files for speech assessments",
+      "files": [
+        "fluency-animals-welcome.mp3",
+        "fluency-animals-instruction.mp3",
+        "fluency-animals-prompt.mp3",
+        "description-picture-welcome.mp3", 
+        "description-picture-instruction.mp3",
+        "description-picture-prompt.mp3",
+        "conversation-daily-welcome.mp3",
+        "conversation-daily-instruction.mp3",
+        "conversation-daily-prompt.mp3",
+        "start-prompt.mp3",
+        "time-warning.mp3",
+        "recording-complete.mp3",
+        "recording-start.mp3"
+      ]
+    },
+    "behavioral-tests": {
+      "description": "Voice files for behavioral assessments",
+      "files": [
+        "behavioral-welcome.mp3",
+        "response-monitoring-instruction.mp3",
+        "pattern-recognition-instruction.mp3",
+        "game-engagement-instruction.mp3",
+        "visual-response-instruction.mp3"
+      ]
+    },
+    "navigation": {
+      "description": "Voice files for navigation elements",
+      "files": [
+        "home-welcome.mp3",
+        "dashboard-welcome.mp3",
+        "tests-page-intro.mp3",
+        "reports-page-intro.mp3",
+        "login-instruction.mp3",
+        "register-instruction.mp3"
+      ]
+    },
+    "common": {
+      "description": "Common system voice files",
+      "files": [
+        "welcome.mp3",
+        "loading.mp3",
+        "error.mp3",
+        "success.mp3",
+        "next.mp3",
+        "previous.mp3",
+        "submit.mp3",
+        "cancel.mp3",
+        "start.mp3",
+        "stop.mp3",
+        "complete.mp3",
+        "continue.mp3",
+        "retry.mp3"
+      ]
+    },
+    "instructions": {
+      "description": "System instruction voice files",
+      "files": [
+        "system-introduction.mp3",
+        "accessibility-features.mp3",
+        "test-process-overview.mp3",
+        "voice-toggle-help.mp3",
+        "privacy-notice.mp3"
+      ]
+    }
+  },
+  "total_files_per_language": 54,
+  "total_files_all_languages": 702,
+  "notes": [
+    "All files should be in MP3 format with 44.1 kHz sample rate",
+    "Files should be professionally recorded with clear pronunciation",
+    "Each language should maintain cultural and linguistic appropriateness",
+    "Fallback to browser TTS if audio file is not found"
+  ]
+}

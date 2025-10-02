@@ -10,6 +10,7 @@ load_dotenv()
 from api.v1.endpoints import auth, users, test_sessions, cognitive_tests, speech_tests, behavioral_tests, reports, progress
 from api.v1.endpoints import enhanced_cognitive_tests, enhanced_speech_tests
 from api.v1.endpoints import comprehensive_cognitive_tests, comprehensive_speech_tests, comprehensive_behavioral_tests
+from api.v1.endpoints import audio_cognitive_tests
 from core.database.connection import engine, Base
 
 @asynccontextmanager
@@ -58,6 +59,7 @@ app.include_router(behavioral_tests.router, prefix="/api/behavioral-tests", tags
 app.include_router(comprehensive_behavioral_tests.router, prefix="/api/behavioral-tests", tags=["comprehensive-behavioral-tests"])
 app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
 app.include_router(progress.router, prefix="/api/progress", tags=["progress"])
+app.include_router(audio_cognitive_tests.router, prefix="/api/cognitive-tests", tags=["audio-cognitive-tests"])
 
 @app.get("/api/health")
 async def health_check():

@@ -126,11 +126,14 @@ async def submit_speech_test(
             "id": str(test_result.id),
             "session_id": str(test_result.session_id),
             "test_name": test_result.test_name,
+            "transcription": transcription,
             "score": test_result.score,
             "max_score": test_result.max_score,
             "risk_level": test_result.risk_level,
             "analysis_result": test_result.analysis_result,
-            "audio_file_url": audio_file_url
+            "linguistic_analysis": test_result.analysis_result.get("analysis", {}),
+            "recommendations": test_result.analysis_result.get("analysis", {}).get("clinical_notes", ""),
+            "audio_file_url": temp_file_path
         }
         
     except Exception as e:
@@ -154,6 +157,7 @@ async def get_session_speech_tests(session_id: str, db: Session = Depends(get_db
         "id": str(result.id),
         "session_id": str(result.session_id),
         "test_name": result.test_name,
+        "transcription": result.raw_data.get("transcription", "") if result.raw_data else "",
         "score": result.score,
         "max_score": result.max_score,
         "risk_level": result.risk_level,
@@ -161,70 +165,7 @@ async def get_session_speech_tests(session_id: str, db: Session = Depends(get_db
         "audio_file_url": result.raw_data.get("audio_file_url") if result.raw_data else None
     } for result in results]
 
-# Text-to-Speech endpoints
-class TTSRequest(BaseModel):
-    text: str
-    language: str = "en"
-    voice: str = "Fritz-PlayAI"
-
-@router.post("/tts/generate")
-async def generate_speech_audio(request: TTSRequest):
-    """
-    Generate speech audio from text using Groq PlayAI TTS
-    """
-    try:
-        # Generate speech using Groq TTS
-        audio_bytes = await groq_service.generate_speech(
-            text=request.text,
-            language=request.language,
-            voice=request.voice
-        )
-        
-        if not audio_bytes:
-            raise HTTPException(status_code=500, detail="TTS generation failed")
-        
-        return Response(
-            content=audio_bytes,
-            media_type="audio/wav",
-            headers={
-                "Content-Disposition": "inline; filename=speech.wav",
-                "Content-Length": str(len(audio_bytes))
-            }
-        )
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"TTS error: {str(e)}")
-
-@router.get("/tts/voices/{language}")
-async def get_available_voices(language: str):
-    """
-    Get available TTS voices for a specific language
-    """
-    voices = {
-        "en": [
-            {"name": "Fritz-PlayAI", "description": "Male, American English"},
-            {"name": "Atlas-PlayAI", "description": "Male, American English"},
-            {"name": "Calum-PlayAI", "description": "Male, Scottish English"},
-            {"name": "Celeste-PlayAI", "description": "Female, American English"},
-            {"name": "Cheyenne-PlayAI", "description": "Female, American English"},
-            {"name": "Gail-PlayAI", "description": "Female, American English"},
-            {"name": "Indigo-PlayAI", "description": "Female, American English"},
-            {"name": "Mamaw-PlayAI", "description": "Female, Southern American"},
-            {"name": "Mason-PlayAI", "description": "Male, American English"},
-            {"name": "Mikail-PlayAI", "description": "Male, American English"},
-            {"name": "Mitch-PlayAI", "description": "Male, American English"},
-            {"name": "Quinn-PlayAI", "description": "Female, American English"},
-            {"name": "Thunder-PlayAI", "description": "Male, Deep American English"}
-        ],
-        "ar": [
-            {"name": "Sara-PlayAI", "description": "Female, Standard Arabic"},
-            {"name": "Khalid-PlayAI", "description": "Male, Standard Arabic"},
-            {"name": "Layla-PlayAI", "description": "Female, Standard Arabic"},
-            {"name": "Ahmed-PlayAI", "description": "Male, Standard Arabic"}
-        ]
-    }
-    
-    return voices.get(language, [])
+# TTS endpoints removed - using local audio assets instead
 
 @router.post("/enhanced/transcribe")
 async def transcribe_audio_enhanced(

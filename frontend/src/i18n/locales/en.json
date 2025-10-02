@@ -25,7 +25,12 @@
     "record": "Record",
     "play": "Play",
     "upload": "Upload",
-    "download": "Download"
+    "download": "Download",
+    "voice_enable": "Enable voice assistance",
+    "voice_disable": "Disable voice assistance", 
+    "voice_on": "Voice On",
+    "voice_off": "Voice Off",
+    "voice_enabled": "Voice assistance enabled"
   },
   "navigation": {
     "home": "Home",

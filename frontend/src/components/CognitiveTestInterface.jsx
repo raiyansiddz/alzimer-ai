@@ -250,6 +250,9 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
                     text={currentTest.sections.map(section => section.instruction).join('. ')} 
                     language={i18n.language}
                     className="text-xs"
+                    testType="cognitive-tests"
+                    step={`${currentTest.name.toLowerCase().replace(/\s+/g, '-')}-instruction`}
+                    autoPlay={testState === 'instruction'}
                   />
                 </div>
                 <ul className="space-y-2 text-blue-800">
@@ -364,6 +367,9 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining, langua
             text={currentSection.instruction}
             language={language}
             className="text-sm"
+            testType="cognitive-tests"
+            step={`${currentSection.id}-instruction`}
+            autoPlay={true}
           />
         </div>
         <p className="text-gray-600">
@@ -413,6 +419,9 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining, langua
                 text={currentSection.words.join(', ')}
                 language={language}
                 className="text-sm"
+                testType="cognitive-tests"
+                step="registration-words"
+                autoPlay={true}
               />
             </div>
             <div className="flex justify-center gap-4">

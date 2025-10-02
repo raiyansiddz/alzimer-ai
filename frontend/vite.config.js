@@ -6,6 +6,6 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
-    allowedHosts: ['*'], // ✅ allows all preview domains
-  },
+    allowedHosts: 'all'  // Allow all hosts permanently
+  }
 })

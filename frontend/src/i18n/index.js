@@ -6,6 +6,7 @@ import { initReactI18next } from 'react-i18next'
 // Import translations
 import enTranslation from './locales/en.json'
 import hiTranslation from './locales/hi.json'
+import hiEnTranslation from './locales/hi-en.json'
 import taTranslation from './locales/ta.json'
 import teTranslation from './locales/te.json'
 import bnTranslation from './locales/bn.json'
@@ -20,6 +21,7 @@ import arTranslation from './locales/ar.json'
 const resources = {
   en: { translation: enTranslation },
   hi: { translation: hiTranslation },
+  'hi-en': { translation: hiEnTranslation },
   ta: { translation: taTranslation },
   te: { translation: teTranslation },
   bn: { translation: bnTranslation },

@@ -256,6 +256,9 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                     text={currentTest.instruction}
                     language={i18n.language}
                     className="text-xs"
+                    testType="speech-tests"
+                    step={`${currentTest.id}-instruction`}
+                    autoPlay={testState === 'instruction'}
                   />
                 </div>
                 <p className="text-green-800 leading-relaxed mb-4">
@@ -315,6 +318,9 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                     text={currentTest.prompt}
                     language={i18n.language}
                     className="text-xs"
+                    testType="speech-tests"
+                    step={`${currentTest.id}-prompt`}
+                    autoPlay={testState === 'recording'}
                   />
                 </div>
                 <div className="text-2xl font-bold text-red-900">

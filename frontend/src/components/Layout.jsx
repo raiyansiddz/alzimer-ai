@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Brain, Home, BarChart3, FileText, User, LogOut } from 'lucide-react'
 import LanguageSwitcher from './LanguageSwitcher'
+import VoiceToggle from './VoiceToggle'
 
 function Layout({ children }) {
   const navigate = useNavigate()
@@ -64,6 +65,7 @@ function Layout({ children }) {
 
             {/* User Actions */}
             <div className="flex items-center gap-3">
+              <VoiceToggle />
               <LanguageSwitcher />
               
               {isLoggedIn ? (

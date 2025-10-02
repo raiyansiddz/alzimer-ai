@@ -52,17 +52,38 @@ class GroqService:
     
     async def transcribe_audio(self, audio_file_path: str, language: str = "en") -> Dict[str, Any]:
         """
-        Transcribe audio using Groq Whisper with language support
+        Transcribe audio using Groq Whisper with enhanced multilingual support
         """
         try:
             start_time = time.time()
+            
+            # Map language codes to Whisper supported languages
+            language_map = {
+                'hi-en': 'hi',  # Hinglish -> Hindi
+                'ta': 'ta',     # Tamil
+                'te': 'hi',     # Telugu -> Hindi (closest supported)
+                'bn': 'hi',     # Bengali -> Hindi (closest supported)  
+                'mr': 'hi',     # Marathi -> Hindi (closest supported)
+                'gu': 'hi',     # Gujarati -> Hindi (closest supported)
+                'zh': 'zh',     # Chinese
+                'ar': 'ar',     # Arabic
+                'es': 'es',     # Spanish
+                'fr': 'fr',     # French
+                'de': 'de',     # German
+                'en': 'en',     # English
+                'hi': 'hi'      # Hindi
+            }
+            
+            # Get the appropriate language code for Whisper
+            whisper_language = language_map.get(language, 'en')
             
             with open(audio_file_path, "rb") as audio_file:
                 response = self.client.audio.transcriptions.create(
                     model="whisper-large-v3-turbo",
                     file=audio_file,
-                    response_format="json",
-                    language=language if language in ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh', 'ar', 'hi'] else None
+                    response_format="verbose_json",  # Get more detailed response
+                    language=whisper_language,
+                    temperature=0.0  # More deterministic results
                 )
             
             processing_time = int((time.time() - start_time) * 1000)
@@ -70,79 +91,82 @@ class GroqService:
             return {
                 "transcription": response.text,
                 "language": language,
-                "processing_time": processing_time
+                "detected_language": getattr(response, 'language', whisper_language),
+                "processing_time": processing_time,
+                "segments": getattr(response, 'segments', []) if hasattr(response, 'segments') else []
             }
         except Exception as e:
             print(f"Groq transcription error: {str(e)}")
             raise
     
-    async def generate_speech(self, text: str, language: str = "en", voice: str = "Fritz-PlayAI") -> bytes:
-        """
-        Generate speech using Groq PlayAI TTS
-        """
-        try:
-            start_time = time.time()
-            
-            # Select appropriate model based on language
-            if language in ['ar']:
-                model = "playai-tts-arabic"
-                # Use Arabic voices: Sara-PlayAI, Khalid-PlayAI, Layla-PlayAI, Ahmed-PlayAI
-                voice = "Sara-PlayAI" if voice == "Fritz-PlayAI" else voice
-            else:
-                model = "playai-tts"
-                # Default English voice options: Fritz-PlayAI, Atlas-PlayAI, Calum-PlayAI, etc.
-            
-            response = self.client.audio.speech.create(
-                model=model,
-                voice=voice,
-                input=text,
-                response_format="wav"
-            )
-            
-            processing_time = int((time.time() - start_time) * 1000)
-            
-            # Write the response to a bytes object
-            audio_bytes = response.content if hasattr(response, 'content') else response.read()
-            
-            print(f"TTS generated successfully in {processing_time}ms for language: {language}")
-            return audio_bytes
-            
-        except Exception as e:
-            print(f"Groq TTS error: {str(e)}")
-            # Return empty bytes if TTS fails
-            return b""
+    # TTS functionality removed - using local audio assets instead
     
     async def analyze_speech_pattern(self, transcription: str, audio_duration: int, user_context: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Analyze speech patterns for cognitive assessment with language support
+        Analyze speech patterns for cognitive assessment with enhanced multilingual support
         """
         language = user_context.get('language', 'en')
         
+        # Language-specific analysis considerations
+        language_notes = {
+            'en': 'Standard English fluency and grammatical patterns',
+            'hi': 'Hindi grammatical structures, Sanskrit-derived vocabulary',
+            'hi-en': 'Hinglish code-switching patterns, bilingual fluency indicators',
+            'ta': 'Tamil agglutinative grammar, classical and modern usage',
+            'te': 'Telugu phonology and grammatical complexity',
+            'bn': 'Bengali grammatical patterns and cultural expressions',
+            'mr': 'Marathi linguistic features and regional variations',
+            'gu': 'Gujarati phonological patterns and vocabulary',
+            'es': 'Spanish grammatical structures and regional variations',
+            'fr': 'French phonology, liaison, and grammatical complexity',
+            'de': 'German grammatical complexity, compound words, case system',
+            'zh': 'Mandarin tonal patterns, grammatical structures',
+            'ar': 'Arabic root patterns, grammatical complexity, dialectal variations'
+        }
+        
         prompt = f"""
-You are a speech-language pathologist specializing in cognitive assessment for {language} speakers.
-Analyze the following speech sample for cognitive impairment indicators, considering cultural and linguistic norms.
+You are a multilingual speech-language pathologist specializing in cognitive assessment.
+Analyze this {language} speech sample for cognitive impairment indicators.
 
 Transcription: {transcription}
-Duration: {audio_duration} seconds
+Duration: {audio_duration} seconds  
+Language: {language}
 User Context: {json.dumps(user_context)}
 
-Provide analysis in JSON format with:
-- fluency_score (0-100)
-- coherence_score (0-100)
-- lexical_diversity (0-100)
-- grammatical_complexity (0-100)
-- cognitive_indicators (list)
-- risk_level (low/medium/high)
-- clinical_notes (string in {language})
-- cultural_considerations (string explaining language-specific factors)
+Language-specific considerations: {language_notes.get(language, 'General linguistic patterns')}
 
-Consider:
-- Language-specific fluency patterns
-- Cultural communication styles
-- Code-switching behavior (if applicable)
-- Dialect variations
+Provide analysis in JSON format with:
+- fluency_score (0-100): Rate speech flow and hesitations
+- coherence_score (0-100): Logical flow and topic maintenance  
+- lexical_diversity (0-100): Vocabulary richness and repetition
+- grammatical_complexity (0-100): Sentence structure complexity
+- cognitive_indicators (list): Specific markers of cognitive issues
+- risk_level (low/mild/moderate/high/severe): Overall cognitive risk assessment
+- clinical_notes (string): Professional observations in user's language
+- cultural_considerations (string): Language/culture-specific factors
+- language_proficiency (0-100): Estimated language proficiency level
+- code_switching_analysis (string): For multilingual contexts like Hinglish
+
+Assessment criteria by language:
+- For Indian languages: Consider cultural narrative styles, respect markers, family references
+- For Hinglish: Assess natural code-switching vs. confusion-based mixing
+- For tonal languages: Consider tone accuracy and meaning preservation
+- For Arabic: Assess classical vs. dialectal usage appropriately
+- For European languages: Consider grammatical case/gender accuracy
+
+Focus on genuine cognitive markers vs. normal language variation.
 """
         
-        return await self.analyze_test_result(prompt, {"transcription": transcription, "duration": audio_duration, "language": language}, self.default_model)
+        return await self.analyze_test_result(
+            prompt, 
+            {
+                "transcription": transcription, 
+                "duration": audio_duration, 
+                "language": language,
+                "word_count": len(transcription.split()) if transcription else 0,
+                "speaking_rate": len(transcription.split()) / (audio_duration / 60) if audio_duration > 0 and transcription else 0
+            }, 
+            self.default_model
+        )
 
 groq_service = GroqService()

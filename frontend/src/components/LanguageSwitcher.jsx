@@ -5,6 +5,7 @@ import { Globe } from 'lucide-react'
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'hi-en', name: 'Hinglish', flag: '🇮🇳' },
   { code: 'ta', name: 'தமிழ்', flag: '🇮🇳' },
   { code: 'te', name: 'తెలుగు', flag: '🇮🇳' },
   { code: 'bn', name: 'বাংলা', flag: '🇮🇳' },

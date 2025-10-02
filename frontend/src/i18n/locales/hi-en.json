@@ -1,0 +1,275 @@
+{
+  "common": {
+    "loading": "Loading ho raha hai...",
+    "error": "Error",
+    "success": "Success",
+    "submit": "Submit karo",
+    "cancel": "Cancel karo",
+    "next": "Next",
+    "previous": "Previous",
+    "save": "Save karo",
+    "delete": "Delete karo",
+    "edit": "Edit karo",
+    "view": "Dekho",
+    "close": "Close karo",
+    "select": "Select karo",
+    "language": "Language",
+    "age": "Umra",
+    "name": "Naam",
+    "email": "Email",
+    "start": "Start karo",
+    "stop": "Roko",
+    "complete": "Complete karo",
+    "continue": "Continue karo",
+    "retry": "Phir try karo",
+    "record": "Record karo",
+    "play": "Play karo",
+    "upload": "Upload karo",
+    "download": "Download karo",
+    "voice_enable": "Voice assistance enable karo",
+    "voice_disable": "Voice assistance disable karo",
+    "voice_on": "Voice On",
+    "voice_off": "Voice Off", 
+    "voice_enabled": "Voice assistance enable ho gaya"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "tests": "Tests",
+    "reports": "Reports",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "register_title": "Account banao",
+    "full_name": "Pura naam",
+    "email_address": "Email address",
+    "password": "Password",
+    "confirm_password": "Password confirm karo",
+    "education_level": "Education level",
+    "vision_status": "Vision status",
+    "language_preference": "Language preference",
+    "register_button": "Register karo",
+    "login_button": "Login karo",
+    "already_have_account": "Kya account already hai?",
+    "dont_have_account": "Account nahi hai?",
+    "education_options": {
+      "non_educated": "Non-educated",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "graduate": "Graduate",
+      "postgraduate": "Postgraduate"
+    },
+    "vision_options": {
+      "normal": "Normal",
+      "weak_vision": "Weak vision",
+      "blind": "Blind"
+    }
+  },
+  "home": {
+    "title": "Dementia Detection System",
+    "subtitle": "AI-powered analysis ke saath comprehensive cognitive assessment platform",
+    "get_started": "Start karo",
+    "features": {
+      "accessibility": {
+        "title": "Sabke liye",
+        "description": "Blind, weak vision, non-educated aur educated users ke liye accessible interfaces"
+      },
+      "comprehensive": {
+        "title": "Comprehensive Tests",
+        "description": "Aapki needs ke according cognitive, speech, aur behavioral assessments"
+      },
+      "progress": {
+        "title": "Progress Track karo",
+        "description": "Detailed reports aur visualizations ke saath time ke saath cognitive health monitor karo"
+      }
+    },
+    "cta": {
+      "title": "Shuru karne ke liye ready ho?",
+      "description": "Apna account banao aur aaj hi apni cognitive health journey start karo",
+      "register_now": "Abhi register karo"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "overview": "Overview",
+    "recent_tests": "Recent tests",
+    "next_assessment": "Next assessment",
+    "progress_summary": "Progress summary",
+    "quick_actions": "Quick actions",
+    "start_new_test": "Naya test start karo",
+    "view_reports": "Reports dekho",
+    "update_profile": "Profile update karo",
+    "no_tests": "Abhi tak koi test complete nahi hua",
+    "schedule_first_test": "Apna pehla cognitive assessment schedule karo"
+  },
+  "tests": {
+    "available_tests": "Available tests",
+    "test_history": "Test history",
+    "start_test": "Test start karo",
+    "continue_test": "Test continue karo",
+    "test_complete": "Test complete",
+    "cognitive_tests": "Cognitive tests",
+    "speech_tests": "Speech tests",
+    "behavioral_tests": "Behavioral tests",
+    "test_types": {
+      "avlt": "Auditory Verbal Learning Test",
+      "mmse": "Mini-Mental State Examination",
+      "moca": "Montreal Cognitive Assessment",
+      "digit_span": "Digit Span Test",
+      "clock_drawing": "Clock Drawing Test",
+      "verbal_fluency": "Verbal Fluency Test",
+      "trail_making": "Trail Making Test"
+    },
+    "duration": "Duration",
+    "minutes": "minutes",
+    "domains": "Cognitive domains",
+    "instructions_title": "Test instructions",
+    "ready_to_start": "Start karne ke liye ready?",
+    "exit_test": "Test se exit karo",
+    "progress": "Progress"
+  },
+  "cognitive_tests": {
+    "mmse": {
+      "name": "Mini-Mental State Examination",
+      "description": "Orientation, memory aur attention including cognitive function ka assessment",
+      "sections": {
+        "orientation_time": {
+          "name": "Time ki orientation",
+          "instruction": "Please time ke bare mein ye questions ka answer do",
+          "questions": [
+            "Konsa year hai?",
+            "Konsa season hai?",
+            "Konsa month hai?",
+            "Aaj ki date kya hai?",
+            "Aaj konsa din hai?"
+          ]
+        },
+        "orientation_place": {
+          "name": "Place ki orientation",
+          "instruction": "Please apne location ke bare mein ye questions ka answer do",
+          "questions": [
+            "Hum kis country mein hain?",
+            "Hum kis state/province mein hain?",
+            "Hum kis city mein hain?",
+            "Hum kis building mein hain?",
+            "Hum kis floor par hain?"
+          ]
+        },
+        "registration": {
+          "name": "Registration",
+          "instruction": "Main teen objects ke naam bolunga. Please unhe repeat karo.",
+          "words": ["Apple", "Paisa", "Table"],
+          "repeat_instruction": "Ab teen words ko repeat karo:"
+        },
+        "attention": {
+          "name": "Attention aur calculation",
+          "instruction": "Please 100 se 7 minus karte hue count karo. 5 numbers ke baad ruk jao.",
+          "calculation_prompt": "100 se 7 minus karte hue count karo. Har number enter karo:"
+        }
+      }
+    },
+    "avlt": {
+      "name": "Auditory Verbal Learning Test",
+      "description": "Word lists ke learning aur recall se related memory test",
+      "trial_1": {
+        "name": "Trial 1 - Pehli presentation",
+        "instruction": "Main 15 words ki list padhunga. Dhyan se suno aur phir sare words bolo jo yaad hain.",
+        "word_list": ["Dholak", "Parda", "Ghanti", "Coffee", "School", "Parents", "Chand", "Garden", "Topi", "Kisaan", "Naak", "Murga", "Rang", "Ghar", "Nadi"]
+      }
+    },
+    "digit_span": {
+      "name": "Digit Span Test",
+      "description": "Working memory aur attention span ka test",
+      "forward": {
+        "name": "Digits forward",
+        "instruction": "Main kuch numbers bolunga. Unhe same order mein repeat karo."
+      },
+      "backward": {
+        "name": "Digits backward",
+        "instruction": "Main kuch numbers bolunga. Unhe reverse order mein repeat karo."
+      }
+    }
+  },
+  "speech_tests": {
+    "fluency_animals": {
+      "name": "Animals naming task",
+      "instruction": "60 seconds mein jitne animals ke naam soch sakto ho, bolo. Clear bol ke different animals ke naam bolo.",
+      "prompt": "Ab animals ke naam bolna start karo...",
+      "duration_text": "60 seconds"
+    },
+    "description_picture": {
+      "name": "Picture description",
+      "instruction": "Is picture ko dekho aur jo bhi dikhta hai describe karo. Bolo kya ho raha hai, picture mein kaun hai, aur jo details dikhte hain.",
+      "prompt": "Picture mein jo dikhta hai describe karo...",
+      "duration_text": "2 minutes"
+    },
+    "conversation_daily": {
+      "name": "Daily routine description",
+      "instruction": "Apne typical day ke bare mein bolo - morning se evening tak. Apni routine, activities aur jo share karna chahte ho describe karo.",
+      "prompt": "Apne normal day ke bare mein bolo...",
+      "duration_text": "3 minutes"
+    },
+    "record_instruction": "Recording start karne ke liye microphone par click karo",
+    "recording": "Recording ho rahi hai...",
+    "stop_recording": "Recording roko",
+    "upload_audio": "Audio file upload karo",
+    "transcription": "Transcription",
+    "analysis": "Speech analysis",
+    "fluency_score": "Fluency score",
+    "coherence_score": "Coherence score",
+    "recommendations": "Recommendations",
+    "recording_in_progress": "Recording chal rahi hai",
+    "recording_complete": "Recording complete",
+    "submit_recording": "Recording submit karo",
+    "analyzing_speech": "Speech analyze ho rahi hai",
+    "analysis_complete": "Analysis complete",
+    "record_again": "Phir record karo"
+  },
+  "behavioral_tests": {
+    "voice_response_monitoring": {
+      "name": "Voice response time monitoring",
+      "description": "Audio commands ke liye response time measure karne wala test",
+      "instruction": "Audio commands dhyan se suno aur jaldi se respond karo."
+    },
+    "audio_pattern_recognition": {
+      "name": "Audio pattern recognition",
+      "description": "Different audio patterns identify aur respond karo",
+      "instruction": "Audio patterns suno aur sequences identify karo."
+    },
+    "visual_response_monitoring": {
+      "name": "Visual response time monitoring",
+      "description": "Visual stimuli ke liye response time measure karne wala test",
+      "instruction": "Screen dhyan se dekho aur visual cues par jaldi respond karo."
+    },
+    "game_engagement": {
+      "name": "Game engagement tracking",
+      "description": "Cognitive engagement assess karne ke liye interactive games",
+      "instruction": "Interactive games khelo aur jitne ho sake complete karo."
+    },
+    "complex_interaction_monitoring": {
+      "name": "Complex interaction monitoring",
+      "description": "Complex cognitive processing chahiye wale advanced tasks",
+      "instruction": "Ye complex tasks complete karo jinhe attention aur problem-solving chahiye."
+    }
+  },
+  "reports": {
+    "my_reports": "Meri reports",
+    "generate_report": "Report generate karo",
+    "download_report": "Report download karo",
+    "report_date": "Report date",
+    "test_session": "Test session",
+    "overall_score": "Overall score",
+    "risk_level": "Risk level",
+    "risk_levels": {
+      "low": "Low risk",
+      "mild": "Mild risk",
+      "moderate": "Moderate risk",
+      "high": "High risk",
+      "severe": "Severe risk"
+    }
+  }
+}
