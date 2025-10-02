@@ -11,9 +11,10 @@ import {
   Clock,
   FileAudio
 } from 'lucide-react'
+import TTSButton from './TTSButton'
 
 function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [currentTestIndex, setCurrentTestIndex] = useState(0)
   const [testState, setTestState] = useState('instruction')
   const [isRecording, setIsRecording] = useState(false)
@@ -30,27 +31,27 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
     {
       id: 'fluency_animals',
       type: 'fluency',
-      name: 'Animal Naming Task',
-      instruction: 'Name as many animals as you can think of in 60 seconds. Speak clearly and try to name as many different animals as possible.',
+      name: t('speech_tests.fluency_animals.name'),
+      instruction: t('speech_tests.fluency_animals.instruction'),
       duration: 60,
-      prompt: 'Start naming animals now...'
+      prompt: t('speech_tests.fluency_animals.prompt')
     },
     {
       id: 'description_picture',
       type: 'description', 
-      name: 'Picture Description',
-      instruction: 'Look at the image and describe everything you see. Talk about what is happening, who is in the picture, and any details you notice.',
+      name: t('speech_tests.description_picture.name'),
+      instruction: t('speech_tests.description_picture.instruction'),
       duration: 120,
-      prompt: 'Describe what you see in the picture...',
+      prompt: t('speech_tests.description_picture.prompt'),
       image: 'https://images.unsplash.com/photo-1515378960530-7c0da6231fb1?w=500&h=400&fit=crop' // Picnic scene
     },
     {
       id: 'conversation_daily',
       type: 'conversation',
-      name: 'Daily Routine Description',
-      instruction: 'Tell me about your typical day from morning to evening. Describe your routine, activities, and anything else you would like to share.',
+      name: t('speech_tests.conversation_daily.name'),
+      instruction: t('speech_tests.conversation_daily.instruction'),
       duration: 180,
-      prompt: 'Tell me about your typical day...'
+      prompt: t('speech_tests.conversation_daily.prompt')
     }
   ]
 
@@ -143,7 +144,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
         test_type: currentTest.type,
         prompt_text: currentTest.prompt,
         expected_duration: currentTest.duration,
-        language: 'en'
+        language: i18n.language
       }))
 
       // Submit to enhanced speech API
@@ -213,7 +214,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
               className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors"
               data-testid="exit-test-btn"
             >
-              Exit Test
+              {t('tests.exit_test')}
             </button>
           </div>
         </div>
@@ -221,7 +222,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
         {/* Progress Bar */}
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm text-gray-600">Progress</span>
+            <span className="text-sm text-gray-600">{t('tests.progress')}</span>
             <span className="text-sm font-medium text-gray-900">
               {Math.round(((currentTestIndex + (testState === 'results' ? 1 : 0)) / speechTests.length) * 100)}%
             </span>
@@ -249,7 +250,14 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
               </h2>
               
               <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6 text-left">
-                <h3 className="font-semibold text-green-900 mb-3">Instructions:</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-green-900">{t('tests.instructions_title')}</h3>
+                  <TTSButton 
+                    text={currentTest.instruction}
+                    language={i18n.language}
+                    className="text-xs"
+                  />
+                </div>
                 <p className="text-green-800 leading-relaxed mb-4">
                   {currentTest.instruction}
                 </p>
@@ -257,11 +265,11 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                 <div className="flex items-center gap-4 text-sm text-green-700">
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    Duration: {formatTime(currentTest.duration)}
+                    {t('tests.duration')}: {formatTime(currentTest.duration)}
                   </div>
                   <div className="flex items-center gap-1">
                     <Mic className="w-4 h-4" />
-                    Voice recording required
+                    {t('speech_tests.record_instruction')}
                   </div>
                 </div>
               </div>
@@ -284,7 +292,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
               data-testid="start-recording-btn"
             >
               <Mic className="w-5 h-5" />
-              Start Recording
+              {t('speech_tests.record_instruction')}
             </button>
           </div>
         )}
@@ -298,10 +306,17 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                 <div className="absolute -inset-2 bg-red-200 rounded-full animate-ping opacity-75" />
               </div>
               
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Recording in Progress</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('speech_tests.recording_in_progress')}</h2>
               
               <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
-                <p className="text-red-800 font-medium mb-2">{currentTest.prompt}</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-red-800 font-medium">{currentTest.prompt}</p>
+                  <TTSButton 
+                    text={currentTest.prompt}
+                    language={i18n.language}
+                    className="text-xs"
+                  />
+                </div>
                 <div className="text-2xl font-bold text-red-900">
                   {formatTime(recordingTime)} / {formatTime(currentTest.duration)}
                 </div>
@@ -314,7 +329,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
               data-testid="stop-recording-btn"
             >
               <Square className="w-5 h-5" />
-              Stop Recording
+              {t('speech_tests.stop_recording')}
             </button>
           </div>
         )}
@@ -323,10 +338,10 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
         {testState === 'processing' && (
           <div className="text-center">
             <FileAudio className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Recording Complete</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('speech_tests.recording_complete')}</h2>
             
             <p className="text-gray-600 mb-8">
-              Your recording is ready. Click submit to analyze your speech.
+              {t('speech_tests.submit_recording')}
             </p>
 
             <div className="flex justify-center gap-4">
@@ -334,7 +349,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                 onClick={() => setTestState('recording')}
                 className="bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
               >
-                Record Again
+                {t('speech_tests.record_again')}
               </button>
               
               <button
@@ -342,7 +357,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                 data-testid="submit-recording-btn"
               >
-                Submit Recording
+                {t('speech_tests.submit_recording')}
               </button>
             </div>
           </div>
@@ -353,9 +368,9 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
           <div className="text-center">
             <div className="mb-8">
               <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Analyzing Speech</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('speech_tests.analyzing_speech')}</h2>
               <p className="text-gray-600">
-                Our AI is processing your speech sample and generating insights...
+                {t('speech_tests.analysis')}
               </p>
             </div>
           </div>
@@ -366,7 +381,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
           <div>
             <div className="mb-8 text-center">
               <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Analysis Complete</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('speech_tests.analysis_complete')}</h2>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -374,7 +389,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
               <div className="bg-gray-50 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <FileAudio className="w-4 h-4" />
-                  Transcription
+                  {t('speech_tests.transcription')}
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
                   {transcription || 'Transcription not available'}
@@ -385,7 +400,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
               <div className="space-y-4">
                 <div className="bg-white border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-gray-900">Fluency Score</span>
+                    <span className="font-medium text-gray-900">{t('speech_tests.fluency_score')}</span>
                     <span className="text-xl font-bold text-blue-600">
                       {Math.round(analysisResult.linguistic_analysis?.fluency_score || 0)}%
                     </span>
@@ -394,7 +409,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
 
                 <div className="bg-white border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-gray-900">Coherence Score</span>
+                    <span className="font-medium text-gray-900">{t('speech_tests.coherence_score')}</span>
                     <span className="text-xl font-bold text-purple-600">
                       {Math.round(analysisResult.linguistic_analysis?.coherence_score || 0)}%
                     </span>
@@ -415,7 +430,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
             {/* Recommendations */}
             {analysisResult.recommendations && (
               <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mb-6">
-                <h3 className="font-semibold text-indigo-900 mb-3">Recommendations</h3>
+                <h3 className="font-semibold text-indigo-900 mb-3">{t('speech_tests.recommendations')}</h3>
                 <div className="text-indigo-800">
                   {typeof analysisResult.recommendations === 'string' 
                     ? analysisResult.recommendations
@@ -432,7 +447,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                   className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                   data-testid="next-speech-test-btn"
                 >
-                  Next Test
+                  {t('common.next')} {t('tests.speech_tests')}
                 </button>
               ) : (
                 <button
@@ -440,7 +455,7 @@ function SpeechTestInterface({ session, testConfig, onComplete, onExit }) {
                   className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                   data-testid="complete-speech-tests-btn"
                 >
-                  Complete Assessment
+                  {t('common.complete')} {t('tests.speech_tests')}
                 </button>
               )}
             </div>

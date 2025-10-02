@@ -42,6 +42,27 @@ export const speechTestAPI = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
   getSessionTests: (sessionId) => api.get(`/speech-tests/session/${sessionId}`),
+  
+  // TTS APIs
+  generateSpeech: (data) => api.post('/speech-tests/tts/generate', data, {
+    responseType: 'blob'
+  }),
+  getVoices: (language) => api.get(`/speech-tests/tts/voices/${language}`),
+  
+  // Enhanced transcription
+  transcribe: (formData) => api.post('/speech-tests/enhanced/transcribe', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  
+  // Enhanced speech tests
+  enhanced: {
+    submit: (formData) => api.post('/speech-tests/enhanced/submit', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    transcribe: (formData) => api.post('/speech-tests/transcribe', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  }
 }
 
 // Behavioral Test APIs

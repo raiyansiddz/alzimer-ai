@@ -50,48 +50,77 @@ class GroqService:
             print(f"Groq analysis error: {str(e)}")
             raise
     
-    async def transcribe_audio(self, audio_file_path: str) -> Dict[str, Any]:
+    async def transcribe_audio(self, audio_file_path: str, language: str = "en") -> Dict[str, Any]:
         """
-        Transcribe audio using Groq Whisper
+        Transcribe audio using Groq Whisper with language support
         """
         try:
             start_time = time.time()
             
             with open(audio_file_path, "rb") as audio_file:
                 response = self.client.audio.transcriptions.create(
-                    model="whisper-large-v3",
+                    model="whisper-large-v3-turbo",
                     file=audio_file,
                     response_format="json",
-                    language="en"
+                    language=language if language in ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh', 'ar', 'hi'] else None
                 )
             
             processing_time = int((time.time() - start_time) * 1000)
             
             return {
                 "transcription": response.text,
+                "language": language,
                 "processing_time": processing_time
             }
         except Exception as e:
             print(f"Groq transcription error: {str(e)}")
             raise
     
-    async def generate_speech(self, text: str, language: str = "en") -> bytes:
+    async def generate_speech(self, text: str, language: str = "en", voice: str = "Fritz-PlayAI") -> bytes:
         """
-        Generate speech using Groq TTS
-        Note: Groq doesn't have native TTS, so we'll use LLM to generate audio descriptions
-        For actual TTS, you'd need to integrate another service or use browser's Web Speech API
+        Generate speech using Groq PlayAI TTS
         """
-        # This is a placeholder - Groq doesn't have TTS
-        # In production, you'd use browser's TTS or another service
-        return b""
+        try:
+            start_time = time.time()
+            
+            # Select appropriate model based on language
+            if language in ['ar']:
+                model = "playai-tts-arabic"
+                # Use Arabic voices: Sara-PlayAI, Khalid-PlayAI, Layla-PlayAI, Ahmed-PlayAI
+                voice = "Sara-PlayAI" if voice == "Fritz-PlayAI" else voice
+            else:
+                model = "playai-tts"
+                # Default English voice options: Fritz-PlayAI, Atlas-PlayAI, Calum-PlayAI, etc.
+            
+            response = self.client.audio.speech.create(
+                model=model,
+                voice=voice,
+                input=text,
+                response_format="wav"
+            )
+            
+            processing_time = int((time.time() - start_time) * 1000)
+            
+            # Write the response to a bytes object
+            audio_bytes = response.content if hasattr(response, 'content') else response.read()
+            
+            print(f"TTS generated successfully in {processing_time}ms for language: {language}")
+            return audio_bytes
+            
+        except Exception as e:
+            print(f"Groq TTS error: {str(e)}")
+            # Return empty bytes if TTS fails
+            return b""
     
     async def analyze_speech_pattern(self, transcription: str, audio_duration: int, user_context: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Analyze speech patterns for cognitive assessment
+        Analyze speech patterns for cognitive assessment with language support
         """
+        language = user_context.get('language', 'en')
+        
         prompt = f"""
-You are a speech-language pathologist specializing in cognitive assessment.
-Analyze the following speech sample for cognitive impairment indicators.
+You are a speech-language pathologist specializing in cognitive assessment for {language} speakers.
+Analyze the following speech sample for cognitive impairment indicators, considering cultural and linguistic norms.
 
 Transcription: {transcription}
 Duration: {audio_duration} seconds
@@ -104,9 +133,16 @@ Provide analysis in JSON format with:
 - grammatical_complexity (0-100)
 - cognitive_indicators (list)
 - risk_level (low/medium/high)
-- clinical_notes (string)
+- clinical_notes (string in {language})
+- cultural_considerations (string explaining language-specific factors)
+
+Consider:
+- Language-specific fluency patterns
+- Cultural communication styles
+- Code-switching behavior (if applicable)
+- Dialect variations
 """
         
-        return await self.analyze_test_result(prompt, {"transcription": transcription, "duration": audio_duration}, "llama-3.3-70b-versatile")
+        return await self.analyze_test_result(prompt, {"transcription": transcription, "duration": audio_duration, "language": language}, self.default_model)
 
 groq_service = GroqService()

@@ -11,9 +11,10 @@ import {
   RotateCcw,
   AlertCircle
 } from 'lucide-react'
+import TTSButton from './TTSButton'
 
 function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [currentTestIndex, setCurrentTestIndex] = useState(0)
   const [currentTest, setCurrentTest] = useState(null)
   const [testState, setTestState] = useState('instruction')
@@ -23,46 +24,37 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
 
   const testDefinitions = {
     mmse: {
-      name: 'Mini-Mental State Examination',
+      name: t('cognitive_tests.mmse.name'),
+      description: t('cognitive_tests.mmse.description'),
       sections: [
         {
           id: 'orientation_time',
-          name: 'Orientation to Time',
-          questions: [
-            'What year is it?',
-            'What season is it?',
-            'What month is it?',
-            'What is today\'s date?',
-            'What day of the week is it?'
-          ],
+          name: t('cognitive_tests.mmse.sections.orientation_time.name'),
+          instruction: t('cognitive_tests.mmse.sections.orientation_time.instruction'),
+          questions: t('cognitive_tests.mmse.sections.orientation_time.questions', { returnObjects: true }),
           maxScore: 5,
           timeLimit: 300
         },
         {
           id: 'orientation_place',
-          name: 'Orientation to Place',
-          questions: [
-            'What country are we in?',
-            'What state/province are we in?',
-            'What city are we in?',
-            'What building are we in?',
-            'What floor are we on?'
-          ],
+          name: t('cognitive_tests.mmse.sections.orientation_place.name'),
+          instruction: t('cognitive_tests.mmse.sections.orientation_place.instruction'),
+          questions: t('cognitive_tests.mmse.sections.orientation_place.questions', { returnObjects: true }),
           maxScore: 5,
           timeLimit: 300
         },
         {
           id: 'registration',
-          name: 'Registration',
-          instruction: 'I am going to name three objects. Please repeat them back to me.',
-          words: ['Apple', 'Penny', 'Table'],
+          name: t('cognitive_tests.mmse.sections.registration.name'),
+          instruction: t('cognitive_tests.mmse.sections.registration.instruction'),
+          words: t('cognitive_tests.mmse.sections.registration.words', { returnObjects: true }),
           maxScore: 3,
           timeLimit: 60
         },
         {
           id: 'attention',
-          name: 'Attention and Calculation',
-          instruction: 'Please count backwards from 100 by 7s. Stop after 5 numbers.',
+          name: t('cognitive_tests.mmse.sections.attention.name'),
+          instruction: t('cognitive_tests.mmse.sections.attention.instruction'),
           expected: ['93', '86', '79', '72', '65'],
           maxScore: 5,
           timeLimit: 300
@@ -70,24 +62,26 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
       ]
     },
     avlt: {
-      name: 'Auditory Verbal Learning Test',
+      name: t('cognitive_tests.avlt.name'),
+      description: t('cognitive_tests.avlt.description'),
       sections: [
         {
           id: 'trial_1',
-          name: 'Trial 1 - First Presentation',
-          wordList: ['Drum', 'Curtain', 'Bell', 'Coffee', 'School', 'Parent', 'Moon', 'Garden', 'Hat', 'Farmer', 'Nose', 'Turkey', 'Color', 'House', 'River'],
-          instruction: 'I will read a list of 15 words. Listen carefully and then tell me all the words you remember.',
+          name: t('cognitive_tests.avlt.trial_1.name'),
+          wordList: t('cognitive_tests.avlt.trial_1.word_list', { returnObjects: true }),
+          instruction: t('cognitive_tests.avlt.trial_1.instruction'),
           maxScore: 15,
           timeLimit: 120
         }
       ]
     },
     digit_span: {
-      name: 'Digit Span Test',
+      name: t('cognitive_tests.digit_span.name'),
+      description: t('cognitive_tests.digit_span.description'),
       sections: [
         {
           id: 'forward',
-          name: 'Digits Forward',
+          name: t('cognitive_tests.digit_span.forward.name'),
           sequences: [
             { digits: '2-1-9', level: 3 },
             { digits: '4-2-7-3', level: 4 },
@@ -95,13 +89,13 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
             { digits: '6-1-9-4-7-3', level: 6 },
             { digits: '4-2-7-3-1-5-8', level: 7 }
           ],
-          instruction: 'I will say some numbers. Repeat them back in the same order.',
+          instruction: t('cognitive_tests.digit_span.forward.instruction'),
           maxScore: 5,
           timeLimit: 60
         },
         {
           id: 'backward',
-          name: 'Digits Backward',
+          name: t('cognitive_tests.digit_span.backward.name'),
           sequences: [
             { digits: '3-8-4', level: 3 },
             { digits: '6-2-9-7', level: 4 },
@@ -109,7 +103,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
             { digits: '6-1-8-4-3-7', level: 6 },
             { digits: '5-3-9-4-1-8-2', level: 7 }
           ],
-          instruction: 'I will say some numbers. Repeat them back in reverse order.',
+          instruction: t('cognitive_tests.digit_span.backward.instruction'),
           maxScore: 5,
           timeLimit: 60
         }
@@ -214,7 +208,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
               className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors"
               data-testid="exit-test-btn"
             >
-              Exit Test
+              {t('tests.exit_test')}
             </button>
           </div>
         </div>
@@ -222,7 +216,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
         {/* Progress Bar */}
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm text-gray-600">Progress</span>
+            <span className="text-sm text-gray-600">{t('tests.progress')}</span>
             <span className="text-sm font-medium text-gray-900">
               {Math.round(((currentTestIndex + (testState === 'completed' ? 1 : 0)) / testConfig.tests.length) * 100)}%
             </span>
@@ -250,7 +244,14 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
               </h2>
               
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left">
-                <h3 className="font-semibold text-blue-900 mb-3">Test Instructions:</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-blue-900">{t('tests.instructions_title')}</h3>
+                  <TTSButton 
+                    text={currentTest.sections.map(section => section.instruction).join('. ')} 
+                    language={i18n.language}
+                    className="text-xs"
+                  />
+                </div>
                 <ul className="space-y-2 text-blue-800">
                   {currentTest.sections.map((section, index) => (
                     <li key={index} className="flex items-start gap-2">
@@ -269,7 +270,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
                 data-testid="start-test-btn"
               >
                 <Play className="w-5 h-5" />
-                Start Test
+                {t('tests.start_test')}
               </button>
             </div>
           </div>
@@ -283,6 +284,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
               onResponse={handleResponse}
               onComplete={() => setTestState('review')}
               timeRemaining={timeRemaining}
+              language={i18n.language}
             />
           </div>
         )}
@@ -296,7 +298,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
             </h2>
             
             <p className="text-gray-600 mb-8">
-              You have successfully completed this test section.
+              {t('tests.test_complete')}
             </p>
 
             <div className="flex justify-center gap-4">
@@ -306,7 +308,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
                   className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2"
                   data-testid="next-test-btn"
                 >
-                  Next Test
+                  {t('common.next')} {t('tests.cognitive_tests')}
                   <ArrowRight className="w-5 h-5" />
                 </button>
               ) : (
@@ -315,7 +317,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
                   className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
                   data-testid="complete-all-tests-btn"
                 >
-                  Complete Assessment
+                  {t('common.complete')} {t('tests.cognitive_tests')}
                   <CheckCircle className="w-5 h-5" />
                 </button>
               )}
@@ -328,7 +330,7 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
 }
 
 // MMSE Test Component
-function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
+function MMSETestComponent({ test, onResponse, onComplete, timeRemaining, language }) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
   const [sectionResponses, setSectionResponses] = useState({})
   
@@ -354,9 +356,16 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
   return (
     <div>
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
-          {currentSection.name}
-        </h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-bold text-gray-900">
+            {currentSection.name}
+          </h3>
+          <TTSButton 
+            text={currentSection.instruction}
+            language={language}
+            className="text-sm"
+          />
+        </div>
         <p className="text-gray-600">
           Section {currentSectionIndex + 1} of {test.sections.length}
         </p>
@@ -396,9 +405,16 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
       {currentSection.id === 'registration' && (
         <div>
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6 text-center">
-            <p className="text-lg font-medium text-gray-900 mb-4">
-              Remember these words:
-            </p>
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <p className="text-lg font-medium text-gray-900">
+                {t('cognitive_tests.mmse.sections.registration.repeat_instruction')}
+              </p>
+              <TTSButton 
+                text={currentSection.words.join(', ')}
+                language={language}
+                className="text-sm"
+              />
+            </div>
             <div className="flex justify-center gap-4">
               {currentSection.words.map((word, index) => (
                 <span key={index} className="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-lg font-semibold">
@@ -410,7 +426,7 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
           
           <div className="space-y-3">
             <label className="block text-gray-900 font-medium">
-              Now repeat the three words back to me:
+              {t('cognitive_tests.mmse.sections.registration.repeat_instruction')}
             </label>
             {[0, 1, 2].map((index) => (
               <input
@@ -435,7 +451,7 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
         <div className="space-y-4">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <p className="text-yellow-800 font-medium">
-              Count backwards from 100 by 7s. Enter each number:
+              {t('cognitive_tests.mmse.sections.attention.calculation_prompt')}
             </p>
           </div>
           
@@ -467,7 +483,7 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
           className="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
-          Previous
+          {t('common.previous')}
         </button>
         
         <button
@@ -475,7 +491,7 @@ function MMSETestComponent({ test, onResponse, onComplete, timeRemaining }) {
           className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center gap-2"
           data-testid="next-section-btn"
         >
-          {currentSectionIndex === test.sections.length - 1 ? 'Complete' : 'Next'}
+          {currentSectionIndex === test.sections.length - 1 ? t('common.complete') : t('common.next')}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

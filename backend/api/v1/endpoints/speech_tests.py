@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
@@ -57,8 +58,8 @@ async def submit_speech_test(
         await out_file.write(content)
     
     try:
-        # Transcribe audio using Groq Whisper
-        transcription_result = await groq_service.transcribe_audio(temp_file_path)
+        # Transcribe audio using Groq Whisper with user's language
+        transcription_result = await groq_service.transcribe_audio(temp_file_path, user_context.get("language", "en"))
         transcription = transcription_result["transcription"]
         
         # Get file info
@@ -159,3 +160,99 @@ async def get_session_speech_tests(session_id: str, db: Session = Depends(get_db
         "analysis_result": result.analysis_result,
         "audio_file_url": result.raw_data.get("audio_file_url") if result.raw_data else None
     } for result in results]
+
+# Text-to-Speech endpoints
+class TTSRequest(BaseModel):
+    text: str
+    language: str = "en"
+    voice: str = "Fritz-PlayAI"
+
+@router.post("/tts/generate")
+async def generate_speech_audio(request: TTSRequest):
+    """
+    Generate speech audio from text using Groq PlayAI TTS
+    """
+    try:
+        # Generate speech using Groq TTS
+        audio_bytes = await groq_service.generate_speech(
+            text=request.text,
+            language=request.language,
+            voice=request.voice
+        )
+        
+        if not audio_bytes:
+            raise HTTPException(status_code=500, detail="TTS generation failed")
+        
+        return Response(
+            content=audio_bytes,
+            media_type="audio/wav",
+            headers={
+                "Content-Disposition": "inline; filename=speech.wav",
+                "Content-Length": str(len(audio_bytes))
+            }
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"TTS error: {str(e)}")
+
+@router.get("/tts/voices/{language}")
+async def get_available_voices(language: str):
+    """
+    Get available TTS voices for a specific language
+    """
+    voices = {
+        "en": [
+            {"name": "Fritz-PlayAI", "description": "Male, American English"},
+            {"name": "Atlas-PlayAI", "description": "Male, American English"},
+            {"name": "Calum-PlayAI", "description": "Male, Scottish English"},
+            {"name": "Celeste-PlayAI", "description": "Female, American English"},
+            {"name": "Cheyenne-PlayAI", "description": "Female, American English"},
+            {"name": "Gail-PlayAI", "description": "Female, American English"},
+            {"name": "Indigo-PlayAI", "description": "Female, American English"},
+            {"name": "Mamaw-PlayAI", "description": "Female, Southern American"},
+            {"name": "Mason-PlayAI", "description": "Male, American English"},
+            {"name": "Mikail-PlayAI", "description": "Male, American English"},
+            {"name": "Mitch-PlayAI", "description": "Male, American English"},
+            {"name": "Quinn-PlayAI", "description": "Female, American English"},
+            {"name": "Thunder-PlayAI", "description": "Male, Deep American English"}
+        ],
+        "ar": [
+            {"name": "Sara-PlayAI", "description": "Female, Standard Arabic"},
+            {"name": "Khalid-PlayAI", "description": "Male, Standard Arabic"},
+            {"name": "Layla-PlayAI", "description": "Female, Standard Arabic"},
+            {"name": "Ahmed-PlayAI", "description": "Male, Standard Arabic"}
+        ]
+    }
+    
+    return voices.get(language, [])
+
+@router.post("/enhanced/transcribe")
+async def transcribe_audio_enhanced(
+    audio_file: UploadFile = File(...),
+    language: str = Form("en")
+):
+    """
+    Enhanced transcription with language support using Groq Whisper
+    """
+    try:
+        # Save uploaded file temporarily
+        temp_file_path = f"/tmp/temp_audio_{uuid.uuid4()}.{audio_file.filename.split('.')[-1]}"
+        
+        async with aiofiles.open(temp_file_path, 'wb') as temp_file:
+            content = await audio_file.read()
+            await temp_file.write(content)
+        
+        # Transcribe with language support
+        result = await groq_service.transcribe_audio(temp_file_path, language)
+        
+        # Clean up temp file
+        if os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+        
+        return result
+        
+    except Exception as e:
+        # Clean up temp file
+        if 'temp_file_path' in locals() and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+        raise HTTPException(status_code=500, detail=f"Transcription error: {str(e)}")

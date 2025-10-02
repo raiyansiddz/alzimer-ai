@@ -16,7 +16,16 @@
     "language": "Language",
     "age": "Age",
     "name": "Name",
-    "email": "Email"
+    "email": "Email",
+    "start": "Start",
+    "stop": "Stop",
+    "complete": "Complete",
+    "continue": "Continue",
+    "retry": "Retry",
+    "record": "Record",
+    "play": "Play",
+    "upload": "Upload",
+    "download": "Download"
   },
   "navigation": {
     "home": "Home",
@@ -112,9 +121,93 @@
     },
     "duration": "Duration",
     "minutes": "minutes",
-    "domains": "Cognitive Domains"
+    "domains": "Cognitive Domains",
+    "instructions_title": "Test Instructions",
+    "ready_to_start": "Ready to start?",
+    "exit_test": "Exit Test",
+    "progress": "Progress"
   },
-  "speech": {
+  "cognitive_tests": {
+    "mmse": {
+      "name": "Mini-Mental State Examination",
+      "description": "Assessment of cognitive function including orientation, memory, and attention",
+      "sections": {
+        "orientation_time": {
+          "name": "Orientation to Time",
+          "instruction": "Please answer the following questions about time",
+          "questions": [
+            "What year is it?",
+            "What season is it?",
+            "What month is it?",
+            "What is today's date?",
+            "What day of the week is it?"
+          ]
+        },
+        "orientation_place": {
+          "name": "Orientation to Place",
+          "instruction": "Please answer the following questions about your location",
+          "questions": [
+            "What country are we in?",
+            "What state/province are we in?",
+            "What city are we in?",
+            "What building are we in?",
+            "What floor are we on?"
+          ]
+        },
+        "registration": {
+          "name": "Registration",
+          "instruction": "I am going to name three objects. Please repeat them back to me.",
+          "words": ["Apple", "Penny", "Table"],
+          "repeat_instruction": "Now repeat the three words back to me:"
+        },
+        "attention": {
+          "name": "Attention and Calculation",
+          "instruction": "Please count backwards from 100 by 7s. Stop after 5 numbers.",
+          "calculation_prompt": "Count backwards from 100 by 7s. Enter each number:"
+        }
+      }
+    },
+    "avlt": {
+      "name": "Auditory Verbal Learning Test",
+      "description": "Memory test involving learning and recall of word lists",
+      "trial_1": {
+        "name": "Trial 1 - First Presentation",
+        "instruction": "I will read a list of 15 words. Listen carefully and then tell me all the words you remember.",
+        "word_list": ["Drum", "Curtain", "Bell", "Coffee", "School", "Parent", "Moon", "Garden", "Hat", "Farmer", "Nose", "Turkey", "Color", "House", "River"]
+      }
+    },
+    "digit_span": {
+      "name": "Digit Span Test",
+      "description": "Test of working memory and attention span",
+      "forward": {
+        "name": "Digits Forward",
+        "instruction": "I will say some numbers. Repeat them back in the same order."
+      },
+      "backward": {
+        "name": "Digits Backward",
+        "instruction": "I will say some numbers. Repeat them back in reverse order."
+      }
+    }
+  },
+  "speech_tests": {
+    "fluency_animals": {
+      "name": "Animal Naming Task",
+      "instruction": "Name as many animals as you can think of in 60 seconds. Speak clearly and try to name as many different animals as possible.",
+      "prompt": "Start naming animals now...",
+      "duration_text": "60 seconds"
+    },
+    "description_picture": {
+      "name": "Picture Description",
+      "instruction": "Look at the image and describe everything you see. Talk about what is happening, who is in the picture, and any details you notice.",
+      "prompt": "Describe what you see in the picture...",
+      "duration_text": "2 minutes"
+    },
+    "conversation_daily": {
+      "name": "Daily Routine Description",
+      "instruction": "Tell me about your typical day from morning to evening. Describe your routine, activities, and anything else you would like to share.",
+      "prompt": "Tell me about your typical day...",
+      "duration_text": "3 minutes"
+    },
     "record_instruction": "Click the microphone to start recording",
     "recording": "Recording...",
     "stop_recording": "Stop Recording",
@@ -123,7 +216,40 @@
     "analysis": "Speech Analysis",
     "fluency_score": "Fluency Score",
     "coherence_score": "Coherence Score",
-    "recommendations": "Recommendations"
+    "recommendations": "Recommendations",
+    "recording_in_progress": "Recording in Progress",
+    "recording_complete": "Recording Complete",
+    "submit_recording": "Submit Recording",
+    "analyzing_speech": "Analyzing Speech",
+    "analysis_complete": "Analysis Complete",
+    "record_again": "Record Again"
+  },
+  "behavioral_tests": {
+    "voice_response_monitoring": {
+      "name": "Voice Response Time Monitoring",
+      "description": "Test measuring response time to audio commands",
+      "instruction": "Listen carefully to the audio commands and respond as quickly as possible."
+    },
+    "audio_pattern_recognition": {
+      "name": "Audio Pattern Recognition",
+      "description": "Identify and respond to different audio patterns",
+      "instruction": "Listen to the audio patterns and identify the sequences."
+    },
+    "visual_response_monitoring": {
+      "name": "Visual Response Time Monitoring",
+      "description": "Test measuring response time to visual stimuli",
+      "instruction": "Watch the screen carefully and respond to visual cues as quickly as possible."
+    },
+    "game_engagement": {
+      "name": "Game Engagement Tracking",
+      "description": "Interactive games to assess cognitive engagement",
+      "instruction": "Play the interactive games and complete as many as you can."
+    },
+    "complex_interaction_monitoring": {
+      "name": "Complex Interaction Monitoring",
+      "description": "Advanced tasks requiring complex cognitive processing",
+      "instruction": "Complete the following complex tasks that require attention and problem-solving."
+    }
   },
   "reports": {
     "my_reports": "My Reports",
