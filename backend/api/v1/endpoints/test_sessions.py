@@ -12,7 +12,8 @@ router = APIRouter()
 
 class TestSessionCreate(BaseModel):
     user_id: str
-    session_type: str  # baseline, monthly, weekly, daily, follow_up
+    session_type: str  # baseline, monthly, weekly, daily, follow_up, blind_audio_suite
+    notes: Optional[str] = None
 
 class TestSessionUpdate(BaseModel):
     status: Optional[str] = None

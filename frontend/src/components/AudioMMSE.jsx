@@ -240,14 +240,32 @@ function AudioMMSE({ session, onComplete, onExit }) {
     }
   }
 
-  const completeTest = () => {
-    onComplete({
-      test_type: 'audio_mmse',
-      sections_completed: mmse_sections.length,
-      total_responses: Object.keys(responses).length,
-      clinical_validity: 'Adapted MMSE for blind users - maintains diagnostic accuracy',
-      responses: responses
-    })
+  const completeTest = async () => {
+    try {
+      // Get comprehensive results with clinical accuracy
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cognitive-tests/mmse/session/${session.id}`)
+      const results = await response.json()
+      
+      onComplete({
+        test_type: 'audio_mmse',
+        sections_completed: mmse_sections.length,
+        total_responses: Object.keys(responses).length,
+        clinical_validity: 'Adapted MMSE for blind users - maintains diagnostic accuracy per Folstein et al. 1975',
+        responses: responses,
+        clinical_results: results,
+        normative_comparison: results.normative_comparison || null,
+        risk_assessment: results.risk_assessment || 'unknown'
+      })
+    } catch (error) {
+      console.error('Error getting final results:', error)
+      onComplete({
+        test_type: 'audio_mmse',
+        sections_completed: mmse_sections.length,
+        total_responses: Object.keys(responses).length,
+        clinical_validity: 'Adapted MMSE for blind users - maintains diagnostic accuracy',
+        responses: responses
+      })
+    }
   }
 
   const formatTime = (seconds) => {

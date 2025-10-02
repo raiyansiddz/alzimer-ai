@@ -30,6 +30,14 @@ export const testSessionAPI = {
   update: (sessionId, data) => api.put(`/test-sessions/${sessionId}`, data),
 }
 
+// User Assessment API
+export const assessmentAPI = {
+  getAccessibilityAssessment: (userId) => api.post(`/assessment/accessibility-assessment?user_id=${userId}`),
+  getUserTestBattery: (userId) => api.get(`/assessment/test-battery/${userId}`),
+  updateAccessibilityPreferences: (userId, preferences) => 
+    api.post(`/assessment/update-accessibility-preferences?user_id=${userId}`, preferences)
+}
+
 // Cognitive Test APIs
 export const cognitiveTestAPI = {
   submit: (data) => api.post('/cognitive-tests/submit', data),

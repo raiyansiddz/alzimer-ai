@@ -15,6 +15,8 @@ import {
 import Layout from '../components/Layout'
 import CognitiveTestInterface from '../components/CognitiveTestInterface'
 import SpeechTestInterface from '../components/SpeechTestInterface'
+import AccessibleTestSelector from '../components/AccessibleTestSelector'
+import AudioMMSE from '../components/AudioMMSE'
 
 function TestsPage() {
   const navigate = useNavigate()
@@ -26,8 +28,18 @@ function TestsPage() {
   const [currentSession, setCurrentSession] = useState(null)
   const [userSessions, setUserSessions] = useState([])
   const [loading, setLoading] = useState(false)
+  const [showPersonalizedTests, setShowPersonalizedTests] = useState(false)
+  const [selectedTestSuite, setSelectedTestSuite] = useState(null)
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
+  
+  // Create user profile for AccessibleTestSelector
+  const userProfile = {
+    vision_status: user.vision_type || 'normal',
+    education_level: user.education_level || 'graduate',
+    language: user.language || 'en',
+    age: user.age
+  }
 
   // Get session_id from URL params if continuing a test
   const urlParams = new URLSearchParams(location.search)
@@ -162,8 +174,38 @@ function TestsPage() {
     return colors[status] || 'text-gray-600 bg-gray-100'
   }
 
-  // If in active test session, show the test interface
+  // If in active test session, show the appropriate test interface
   if (currentSession && selectedTest) {
+    // Handle personalized test suites
+    if (selectedTestSuite && selectedTestSuite.id === 'blind_audio_suite') {
+      // Check which test from the suite to show
+      const currentTestId = selectedTest.id || selectedTestSuite.tests[0].id
+      
+      if (currentTestId === 'audio_mmse') {
+        return (
+          <Layout>
+            <AudioMMSE 
+              session={currentSession}
+              onComplete={() => {
+                setCurrentSession(null)
+                setSelectedTest(null)
+                setSelectedTestSuite(null)
+                navigate('/tests')
+                loadUserSessions()
+              }}
+              onExit={() => {
+                setCurrentSession(null)
+                setSelectedTest(null)
+                setSelectedTestSuite(null)
+                navigate('/tests')
+              }}
+            />
+          </Layout>
+        )
+      }
+    }
+    
+    // Standard test interfaces
     if (selectedTest.type === 'cognitive') {
       return (
         <Layout>
@@ -173,12 +215,14 @@ function TestsPage() {
             onComplete={() => {
               setCurrentSession(null)
               setSelectedTest(null)
+              setSelectedTestSuite(null)
               navigate('/tests')
               loadUserSessions()
             }}
             onExit={() => {
               setCurrentSession(null)
               setSelectedTest(null)
+              setSelectedTestSuite(null)
               navigate('/tests')
             }}
           />
@@ -193,18 +237,50 @@ function TestsPage() {
             onComplete={() => {
               setCurrentSession(null)
               setSelectedTest(null)
+              setSelectedTestSuite(null)
               navigate('/tests')
               loadUserSessions()
             }}
             onExit={() => {
               setCurrentSession(null)
               setSelectedTest(null)
+              setSelectedTestSuite(null)
               navigate('/tests')
             }}
           />
         </Layout>
       )
     }
+  }
+
+  // Show personalized test selector
+  if (showPersonalizedTests) {
+    return (
+      <Layout>
+        <AccessibleTestSelector 
+          userProfile={userProfile}
+          onTestSuiteSelected={(suite) => {
+            setSelectedTestSuite(suite)
+            // Start the first test in the suite
+            const firstTest = {
+              id: suite.tests[0].id,
+              name: suite.tests[0].name,
+              type: 'cognitive', // Most personalized tests are cognitive
+              suite: suite
+            }
+            startTest(firstTest)
+          }}
+        />
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setShowPersonalizedTests(false)}
+            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
+          >
+            Back to Standard Tests
+          </button>
+        </div>
+      </Layout>
+    )
   }
 
   return (
@@ -247,7 +323,33 @@ function TestsPage() {
 
         {/* Available Tests */}
         {activeTab === 'available' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <>
+            {/* Personalized Assessment Section */}
+            <div className="mb-8 p-6 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl border border-purple-200">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">🎯 Personalized Assessment</h2>
+              <p className="text-gray-700 mb-4">
+                Get a customized test battery based on your vision status ({userProfile.vision_status}), 
+                education level ({userProfile.education_level}), and language preference.
+              </p>
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-purple-700">
+                  ✓ Clinically validated tests adapted for your needs<br/>
+                  ✓ Evidence-based cognitive assessment<br/>
+                  ✓ Accessibility-first design
+                </div>
+                <button
+                  onClick={() => setShowPersonalizedTests(true)}
+                  className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+                  data-testid="start-personalized-assessment"
+                >
+                  Start Personalized Assessment
+                </button>
+              </div>
+            </div>
+
+            {/* Standard Tests */}
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Standard Test Library</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {availableTests.map((test) => {
               const IconComponent = test.icon
               return (
@@ -285,7 +387,8 @@ function TestsPage() {
                 </div>
               )
             })}
-          </div>
+            </div>
+          </>
         )}
 
         {/* Test History */}

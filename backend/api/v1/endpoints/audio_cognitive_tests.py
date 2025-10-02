@@ -120,12 +120,17 @@ async def submit_mmse_audio_section(
             id=str(uuid.uuid4()),
             test_result_id=test_result.id,
             test_name=f"MMSE_{test_section}",
-            section_scores={test_section: clinical_score["score"]},
-            total_score=clinical_score["score"],
-            max_total_score=clinical_score["max_score"],
-            cognitive_domains=[section_info.get("clinical_note", "")],
-            impairment_indicators=clinical_score.get("impairment_indicators", []),
-            recommendations=clinical_score.get("clinical_recommendations", "")
+            subtest_name=test_section,
+            score=clinical_score["score"],
+            max_score=clinical_score["max_score"],
+            response_time=0,  # Will be calculated from audio analysis
+            errors=0,  # Will be determined from clinical analysis
+            details={
+                "section_scores": {test_section: clinical_score["score"]},
+                "cognitive_domains": [section_info.get("clinical_note", "")],
+                "impairment_indicators": clinical_score.get("impairment_indicators", []),
+                "recommendations": clinical_score.get("clinical_recommendations", "")
+            }
         )
         
         db.add(cognitive_result)

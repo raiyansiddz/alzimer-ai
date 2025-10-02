@@ -88,7 +88,7 @@ class AlzheimerAPITester:
             "email": f"test_user_{int(time.time())}@example.com",
             "name": "Test User",
             "age": 65,
-            "education_level": "bachelor",
+            "education_level": "graduate",
             "vision_type": "normal",
             "language": "en"
         }
@@ -182,7 +182,8 @@ class AlzheimerAPITester:
                 "total_score": 24
             },
             "response_times": [2.5, 3.1, 1.8, 4.2],
-            "user_notes": "Test completed successfully"
+            "user_notes": "Test completed successfully",
+            "risk_level": "low"
         }
         
         return self.run_test(
