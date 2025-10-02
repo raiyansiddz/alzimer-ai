@@ -6,6 +6,18 @@ import Layout from '../components/Layout'
 function HomePage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  
+  // Check if user is already logged in
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const isLoggedIn = !!user.id
+  
+  const handleGetStarted = () => {
+    if (isLoggedIn) {
+      navigate('/dashboard')
+    } else {
+      navigate('/register')
+    }
+  }
 
   return (
     <Layout>
@@ -22,11 +34,11 @@ function HomePage() {
             {t('home.subtitle')}
           </p>
           <button
-            onClick={() => navigate('/register')}
+            onClick={handleGetStarted}
             className="glass px-8 py-4 rounded-xl text-lg font-semibold text-indigo-600 hover:bg-white/20 transition-all transform hover:scale-105"
             data-testid="get-started-btn"
           >
-            {t('home.get_started')}
+            {isLoggedIn ? t('navigation.dashboard') : t('home.get_started')}
           </button>
         </div>
 

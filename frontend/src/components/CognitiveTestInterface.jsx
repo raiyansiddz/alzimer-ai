@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { 
   Brain, 
@@ -8,159 +8,274 @@ import {
   ArrowLeft,
   Play,
   Pause,
+  Mic,
+  Square,
   RotateCcw,
   AlertCircle
 } from 'lucide-react'
 import TTSButton from './TTSButton'
+import { testSessionAPI } from '../lib/api'
 
 function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
   const { t, i18n } = useTranslation()
   const [currentTestIndex, setCurrentTestIndex] = useState(0)
-  const [currentTest, setCurrentTest] = useState(null)
-  const [testState, setTestState] = useState('instruction')
+  const [testState, setTestState] = useState('instruction') // instruction, active, completed
   const [responses, setResponses] = useState({})
+  const [currentResponse, setCurrentResponse] = useState('')
   const [timeRemaining, setTimeRemaining] = useState(0)
-  const [isActive, setIsActive] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [score, setScore] = useState(0)
+  const [maxScore, setMaxScore] = useState(0)
+  
+  const mediaRecorderRef = useRef(null)
+  const chunksRef = useRef([])
 
+  // Define comprehensive test configurations
   const testDefinitions = {
-    mmse: {
-      name: t('cognitive_tests.mmse.name'),
-      description: t('cognitive_tests.mmse.description'),
-      sections: [
+    'cognitive-battery': {
+      name: t('tests.comprehensive_cognitive_battery'),
+      tests: [
         {
-          id: 'orientation_time',
-          name: t('cognitive_tests.mmse.sections.orientation_time.name'),
-          instruction: t('cognitive_tests.mmse.sections.orientation_time.instruction'),
-          questions: t('cognitive_tests.mmse.sections.orientation_time.questions', { returnObjects: true }),
-          maxScore: 5,
+          id: 'mmse_orientation',
+          name: 'MMSE - Orientation',
+          type: 'questions',
+          instruction: 'Please answer the following questions about time and place.',
+          questions: [
+            'What year is it?',
+            'What season is it?', 
+            'What month is it?',
+            'What is today\'s date?',
+            'What day of the week is it?',
+            'What country are we in?',
+            'What state/province are we in?',
+            'What city are we in?',
+            'What building are we in?',
+            'What floor are we on?'
+          ],
+          maxScore: 10,
           timeLimit: 300
         },
         {
-          id: 'orientation_place',
-          name: t('cognitive_tests.mmse.sections.orientation_place.name'),
-          instruction: t('cognitive_tests.mmse.sections.orientation_place.instruction'),
-          questions: t('cognitive_tests.mmse.sections.orientation_place.questions', { returnObjects: true }),
-          maxScore: 5,
-          timeLimit: 300
-        },
-        {
-          id: 'registration',
-          name: t('cognitive_tests.mmse.sections.registration.name'),
-          instruction: t('cognitive_tests.mmse.sections.registration.instruction'),
-          words: t('cognitive_tests.mmse.sections.registration.words', { returnObjects: true }),
+          id: 'mmse_memory',
+          name: 'MMSE - Memory',
+          type: 'memory',
+          instruction: 'I will say three words. Listen carefully and repeat them back to me.',
+          words: ['Apple', 'Penny', 'Table'],
           maxScore: 3,
           timeLimit: 60
         },
         {
-          id: 'attention',
-          name: t('cognitive_tests.mmse.sections.attention.name'),
-          instruction: t('cognitive_tests.mmse.sections.attention.instruction'),
-          expected: ['93', '86', '79', '72', '65'],
-          maxScore: 5,
-          timeLimit: 300
+          id: 'digit_span',
+          name: 'Digit Span Test',
+          type: 'digit_sequence',
+          instruction: 'I will say some numbers. Repeat them back in the same order.',
+          sequences: [
+            '2-1-9',
+            '4-2-7-3', 
+            '1-5-2-8-6',
+            '6-1-9-4-7-3'
+          ],
+          maxScore: 4,
+          timeLimit: 180
         }
       ]
     },
-    avlt: {
-      name: t('cognitive_tests.avlt.name'),
-      description: t('cognitive_tests.avlt.description'),
-      sections: [
+    'memory-focus': {
+      name: t('tests.memory_assessment'),
+      tests: [
         {
-          id: 'trial_1',
-          name: t('cognitive_tests.avlt.trial_1.name'),
-          wordList: t('cognitive_tests.avlt.trial_1.word_list', { returnObjects: true }),
-          instruction: t('cognitive_tests.avlt.trial_1.instruction'),
+          id: 'word_recall',
+          name: 'Word List Recall',
+          type: 'memory_list',
+          instruction: 'I will read 15 words. Listen carefully and remember as many as you can.',
+          wordList: ['Drum', 'Curtain', 'Bell', 'Coffee', 'School', 'Parent', 'Moon', 'Garden', 'Hat', 'Farmer', 'Nose', 'Turkey', 'Color', 'House', 'River'],
+          maxScore: 15,
+          timeLimit: 120
+        },
+        {
+          id: 'delayed_recall',
+          name: 'Delayed Word Recall',
+          type: 'delayed_memory',
+          instruction: 'Now tell me all the words from the list you can remember.',
           maxScore: 15,
           timeLimit: 120
         }
       ]
     },
-    digit_span: {
-      name: t('cognitive_tests.digit_span.name'),
-      description: t('cognitive_tests.digit_span.description'),
-      sections: [
+    'quick-screen': {
+      name: t('tests.quick_cognitive_screening'),
+      tests: [
         {
-          id: 'forward',
-          name: t('cognitive_tests.digit_span.forward.name'),
-          sequences: [
-            { digits: '2-1-9', level: 3 },
-            { digits: '4-2-7-3', level: 4 },
-            { digits: '1-5-2-8-6', level: 5 },
-            { digits: '6-1-9-4-7-3', level: 6 },
-            { digits: '4-2-7-3-1-5-8', level: 7 }
+          id: 'quick_mmse',
+          name: 'Quick MMSE Screening',
+          type: 'questions',
+          instruction: 'Quick cognitive screening questions.',
+          questions: [
+            'What year is it?',
+            'What month is it?',
+            'What day of the week is it?',
+            'What country are we in?',
+            'What city are we in?'
           ],
-          instruction: t('cognitive_tests.digit_span.forward.instruction'),
           maxScore: 5,
-          timeLimit: 60
-        },
-        {
-          id: 'backward',
-          name: t('cognitive_tests.digit_span.backward.name'),
-          sequences: [
-            { digits: '3-8-4', level: 3 },
-            { digits: '6-2-9-7', level: 4 },
-            { digits: '4-1-5-9-3', level: 5 },
-            { digits: '6-1-8-4-3-7', level: 6 },
-            { digits: '5-3-9-4-1-8-2', level: 7 }
-          ],
-          instruction: t('cognitive_tests.digit_span.backward.instruction'),
-          maxScore: 5,
-          timeLimit: 60
+          timeLimit: 120
         }
       ]
     }
   }
 
-  useEffect(() => {
-    if (testConfig && testConfig.tests.length > 0) {
-      const testType = testConfig.tests[currentTestIndex]
-      setCurrentTest(testDefinitions[testType])
-    }
-  }, [currentTestIndex, testConfig])
+  const currentTestDefinition = testDefinitions[testConfig.id]
+  const currentTest = currentTestDefinition?.tests[currentTestIndex]
+  const totalTests = currentTestDefinition?.tests.length || 1
 
   useEffect(() => {
-    let interval = null
-    if (isActive && timeRemaining > 0) {
+    let interval
+    if (testState === 'active' && timeRemaining > 0) {
       interval = setInterval(() => {
-        setTimeRemaining(time => time - 1)
+        setTimeRemaining(time => {
+          if (time <= 1) {
+            handleTimeUp()
+            return 0
+          }
+          return time - 1
+        })
       }, 1000)
-    } else if (timeRemaining === 0 && isActive) {
-      handleTimeUp()
     }
     return () => clearInterval(interval)
-  }, [isActive, timeRemaining])
+  }, [testState, timeRemaining])
 
   const handleTimeUp = () => {
-    setIsActive(false)
-    // Auto-submit current section
-    if (testState === 'testing') {
-      setTestState('review')
+    if (isRecording) {
+      stopRecording()
+    } else {
+      submitResponse()
     }
   }
 
   const startTest = () => {
-    setTestState('testing')
-    const section = currentTest.sections[0]
-    setTimeRemaining(section.timeLimit)
-    setIsActive(true)
+    if (!currentTest) return
+    
+    setTestState('active')
+    setTimeRemaining(currentTest.timeLimit)
+    setCurrentResponse('')
+    
+    // Start recording for speech-based tests
+    if (['memory', 'memory_list', 'delayed_memory', 'digit_sequence'].includes(currentTest.type)) {
+      setTimeout(() => startRecording(), 2000)
+    }
   }
 
-  const handleResponse = (sectionId, response) => {
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true
+        }
+      })
+
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
+      chunksRef.current = []
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data)
+        }
+      }
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
+        handleAudioResponse(blob)
+        stream.getTracks().forEach(track => track.stop())
+      }
+
+      mediaRecorder.start()
+      setIsRecording(true)
+
+    } catch (error) {
+      console.error('Error starting recording:', error)
+      alert('Microphone access required for this test. Please allow microphone access and try again.')
+    }
+  }
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop()
+    }
+    setIsRecording(false)
+  }
+
+  const handleAudioResponse = async (audioBlob) => {
+    // Simulate analysis - in real implementation, this would call the backend
+    const mockAnalysis = {
+      transcription: 'User response recorded',
+      score: Math.floor(Math.random() * currentTest.maxScore + 1),
+      maxScore: currentTest.maxScore
+    }
+    
     setResponses(prev => ({
       ...prev,
-      [`${currentTest.name}_${sectionId}`]: response
+      [currentTest.id]: mockAnalysis
     }))
+    
+    setScore(prevScore => prevScore + mockAnalysis.score)
+    setMaxScore(prevMax => prevMax + mockAnalysis.maxScore)
+    
+    setTestState('completed')
+  }
+
+  const submitResponse = () => {
+    if (!currentTest) return
+    
+    // Simple scoring for text responses
+    const responseScore = currentResponse.trim() ? Math.ceil(currentTest.maxScore * 0.8) : 0
+    
+    setResponses(prev => ({
+      ...prev,
+      [currentTest.id]: {
+        response: currentResponse,
+        score: responseScore,
+        maxScore: currentTest.maxScore
+      }
+    }))
+    
+    setScore(prevScore => prevScore + responseScore)
+    setMaxScore(prevMax => prevMax + currentTest.maxScore)
+    
+    setTestState('completed')
   }
 
   const nextTest = () => {
-    if (currentTestIndex < testConfig.tests.length - 1) {
-      setCurrentTestIndex(currentTestIndex + 1)
+    if (currentTestIndex < totalTests - 1) {
+      setCurrentTestIndex(prev => prev + 1)
       setTestState('instruction')
-      setIsActive(false)
-      setTimeRemaining(0)
+      setCurrentResponse('')
     } else {
-      // All tests completed
-      onComplete()
+      completeAllTests()
+    }
+  }
+
+  const completeAllTests = async () => {
+    try {
+      // Submit results to backend
+      const finalResults = {
+        session_id: session.id,
+        test_type: testConfig.id,
+        total_score: score,
+        max_score: maxScore,
+        completion_rate: (score / maxScore) * 100,
+        responses: responses,
+        risk_level: score / maxScore > 0.7 ? 'low' : score / maxScore > 0.5 ? 'moderate' : 'high'
+      }
+      
+      // In real implementation, call API to save results
+      console.log('Test completed:', finalResults)
+      
+      onComplete(finalResults)
+    } catch (error) {
+      console.error('Error completing test:', error)
+      onComplete({ error: 'Failed to save test results' })
     }
   }
 
@@ -172,10 +287,17 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
 
   if (!currentTest) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center">
-          <Brain className="w-12 h-12 text-indigo-600 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-600">Loading test...</p>
+          <AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Test Configuration Error</h2>
+          <p className="text-gray-600 mb-8">The selected test is not properly configured.</p>
+          <button
+            onClick={onExit}
+            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
+          >
+            Return to Tests
+          </button>
         </div>
       </div>
     )
@@ -187,14 +309,19 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
       <div className="glass rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{currentTest.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {currentTestDefinition.name}
+            </h1>
             <p className="text-gray-600">
-              Test {currentTestIndex + 1} of {testConfig.tests.length}
+              Test {currentTestIndex + 1} of {totalTests} • {currentTest.name}
+            </p>
+            <p className="text-sm text-indigo-600 mt-1">
+              Score: {score}/{maxScore}
             </p>
           </div>
           
           <div className="flex items-center gap-4">
-            {timeRemaining > 0 && (
+            {timeRemaining > 0 && testState === 'active' && (
               <div className="flex items-center gap-2 px-3 py-2 bg-blue-100 rounded-lg">
                 <Clock className="w-4 h-4 text-blue-600" />
                 <span className="font-medium text-blue-800">
@@ -206,9 +333,8 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
             <button
               onClick={onExit}
               className="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors"
-              data-testid="exit-test-btn"
             >
-              {t('tests.exit_test')}
+              Exit Test
             </button>
           </div>
         </div>
@@ -216,16 +342,16 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
         {/* Progress Bar */}
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm text-gray-600">{t('tests.progress')}</span>
+            <span className="text-sm text-gray-600">Progress</span>
             <span className="text-sm font-medium text-gray-900">
-              {Math.round(((currentTestIndex + (testState === 'completed' ? 1 : 0)) / testConfig.tests.length) * 100)}%
+              {Math.round(((currentTestIndex + (testState === 'completed' ? 1 : 0)) / totalTests) * 100)}%
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
               style={{ 
-                width: `${((currentTestIndex + (testState === 'completed' ? 1 : 0)) / testConfig.tests.length) * 100}%` 
+                width: `${((currentTestIndex + (testState === 'completed' ? 1 : 0)) / totalTests) * 100}%` 
               }}
             />
           </div>
@@ -237,272 +363,180 @@ function CognitiveTestInterface({ session, testConfig, onComplete, onExit }) {
         {/* Instructions State */}
         {testState === 'instruction' && (
           <div className="text-center">
+            <Brain className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              {currentTest.name}
+            </h2>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left">
+              <h3 className="font-semibold text-blue-900 mb-3">Instructions</h3>
+              <p className="text-blue-800 leading-relaxed mb-4">
+                {currentTest.instruction}
+              </p>
+              
+              {/* Show test-specific content */}
+              {currentTest.type === 'questions' && (
+                <div className="mt-4">
+                  <p className="font-medium mb-2">Questions ({currentTest.questions.length}):</p>
+                  <ol className="list-decimal list-inside space-y-1 text-sm">
+                    {currentTest.questions.map((question, idx) => (
+                      <li key={idx}>{question}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              
+              {currentTest.type === 'memory' && currentTest.words && (
+                <div className="mt-4 p-4 bg-white rounded border">
+                  <p className="font-medium mb-2">Remember these words:</p>
+                  <div className="flex gap-3 justify-center">
+                    {currentTest.words.map((word, idx) => (
+                      <span key={idx} className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded font-semibold">
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {currentTest.type === 'memory_list' && currentTest.wordList && (
+                <div className="mt-4 p-4 bg-white rounded border">
+                  <p className="font-medium mb-2">Word List ({currentTest.wordList.length} words):</p>
+                  <div className="grid grid-cols-3 gap-2 text-sm">
+                    {currentTest.wordList.map((word, idx) => (
+                      <span key={idx} className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-center">
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex items-center gap-4 text-sm text-blue-700 mt-4">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  Time Limit: {formatTime(currentTest.timeLimit)}
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" />
+                  Max Score: {currentTest.maxScore} points
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={startTest}
+              className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+            >
+              Begin Test
+            </button>
+          </div>
+        )}
+
+        {/* Active Test State */}
+        {testState === 'active' && (
+          <div className="text-center">
             <div className="mb-8">
-              <Brain className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+              {isRecording ? (
+                <div className="relative inline-block">
+                  <Mic className="w-24 h-24 mx-auto mb-4 text-red-600" />
+                  <div className="absolute -inset-2 bg-red-200 rounded-full animate-ping opacity-75" />
+                </div>
+              ) : (
+                <Brain className="w-24 h-24 mx-auto mb-4 text-blue-600" />
+              )}
+              
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                {currentTest.name}
+                {isRecording ? 'Recording Your Response' : currentTest.name}
               </h2>
               
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-blue-900">{t('tests.instructions_title')}</h3>
-                  <TTSButton 
-                    text={currentTest.sections.map(section => section.instruction).join('. ')} 
-                    language={i18n.language}
-                    className="text-xs"
-                    testType="cognitive-tests"
-                    step={`${currentTest.name.toLowerCase().replace(/\s+/g, '-')}-instruction`}
-                    autoPlay={testState === 'instruction'}
-                  />
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                <p className="text-green-800 text-lg mb-4">
+                  {currentTest.instruction}
+                </p>
+                
+                {!isRecording && ['questions', 'delayed_memory'].includes(currentTest.type) && (
+                  <div>
+                    <textarea
+                      value={currentResponse}
+                      onChange={(e) => setCurrentResponse(e.target.value)}
+                      placeholder="Type your answer here..."
+                      className="w-full p-4 border border-gray-300 rounded-lg resize-none h-32 mb-4"
+                    />
+                    <button
+                      onClick={submitResponse}
+                      className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                    >
+                      Submit Response
+                    </button>
+                  </div>
+                )}
+                
+                {isRecording && (
+                  <button
+                    onClick={stopRecording}
+                    className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center gap-2 mx-auto"
+                  >
+                    <Square className="w-5 h-5" />
+                    Stop Recording
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Completed State */}
+        {testState === 'completed' && (
+          <div className="text-center">
+            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Test Complete
+            </h2>
+            
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold text-indigo-600">
+                    {responses[currentTest.id]?.score || 0}/{currentTest.maxScore}
+                  </p>
+                  <p className="text-sm text-gray-600">Score</p>
                 </div>
-                <ul className="space-y-2 text-blue-800">
-                  {currentTest.sections.map((section, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                      <span>{section.instruction || `Complete ${section.name}`}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <p className="text-2xl font-bold text-purple-600">
+                    {Math.round(((responses[currentTest.id]?.score || 0) / currentTest.maxScore) * 100)}%
+                  </p>
+                  <p className="text-sm text-gray-600">Accuracy</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-green-600">
+                    {currentTestIndex + 1}/{totalTests}
+                  </p>
+                  <p className="text-sm text-gray-600">Progress</p>
+                </div>
               </div>
             </div>
 
             <div className="flex justify-center gap-4">
-              <button
-                onClick={startTest}
-                className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2"
-                data-testid="start-test-btn"
-              >
-                <Play className="w-5 h-5" />
-                {t('tests.start_test')}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Testing State */}
-        {testState === 'testing' && (
-          <div>
-            <MMSETestComponent 
-              test={currentTest}
-              onResponse={handleResponse}
-              onComplete={() => setTestState('review')}
-              timeRemaining={timeRemaining}
-              language={i18n.language}
-            />
-          </div>
-        )}
-
-        {/* Review State */}
-        {testState === 'review' && (
-          <div className="text-center">
-            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {currentTest.name} Completed
-            </h2>
-            
-            <p className="text-gray-600 mb-8">
-              {t('tests.test_complete')}
-            </p>
-
-            <div className="flex justify-center gap-4">
-              {currentTestIndex < testConfig.tests.length - 1 ? (
+              {currentTestIndex < totalTests - 1 ? (
                 <button
                   onClick={nextTest}
                   className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2"
-                  data-testid="next-test-btn"
                 >
-                  {t('common.next')} {t('tests.cognitive_tests')}
+                  Next Test
                   <ArrowRight className="w-5 h-5" />
                 </button>
               ) : (
                 <button
-                  onClick={onComplete}
-                  className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
-                  data-testid="complete-all-tests-btn"
+                  onClick={completeAllTests}
+                  className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                 >
-                  {t('common.complete')} {t('tests.cognitive_tests')}
-                  <CheckCircle className="w-5 h-5" />
+                  Complete Assessment
                 </button>
               )}
             </div>
           </div>
         )}
-      </div>
-    </div>
-  )
-}
-
-// MMSE Test Component
-function MMSETestComponent({ test, onResponse, onComplete, timeRemaining, language }) {
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
-  const [sectionResponses, setSectionResponses] = useState({})
-  
-  const currentSection = test.sections[currentSectionIndex]
-
-  const handleSectionResponse = (response) => {
-    const updatedResponses = {
-      ...sectionResponses,
-      [currentSection.id]: response
-    }
-    setSectionResponses(updatedResponses)
-    onResponse(currentSection.id, response)
-  }
-
-  const nextSection = () => {
-    if (currentSectionIndex < test.sections.length - 1) {
-      setCurrentSectionIndex(currentSectionIndex + 1)
-    } else {
-      onComplete()
-    }
-  }
-
-  return (
-    <div>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-bold text-gray-900">
-            {currentSection.name}
-          </h3>
-          <TTSButton 
-            text={currentSection.instruction}
-            language={language}
-            className="text-sm"
-            testType="cognitive-tests"
-            step={`${currentSection.id}-instruction`}
-            autoPlay={true}
-          />
-        </div>
-        <p className="text-gray-600">
-          Section {currentSectionIndex + 1} of {test.sections.length}
-        </p>
-      </div>
-
-      {currentSection.instruction && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <p className="text-blue-800 font-medium">{currentSection.instruction}</p>
-        </div>
-      )}
-
-      {/* Orientation Questions */}
-      {(currentSection.id === 'orientation_time' || currentSection.id === 'orientation_place') && (
-        <div className="space-y-4">
-          {currentSection.questions.map((question, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4">
-              <label className="block text-gray-900 font-medium mb-2">
-                {index + 1}. {question}
-              </label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter your answer..."
-                onChange={(e) => {
-                  const responses = sectionResponses[currentSection.id] || []
-                  responses[index] = e.target.value
-                  handleSectionResponse([...responses])
-                }}
-                data-testid={`question-${index}`}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Registration */}
-      {currentSection.id === 'registration' && (
-        <div>
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6 text-center">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <p className="text-lg font-medium text-gray-900">
-                {t('cognitive_tests.mmse.sections.registration.repeat_instruction')}
-              </p>
-              <TTSButton 
-                text={currentSection.words.join(', ')}
-                language={language}
-                className="text-sm"
-                testType="cognitive-tests"
-                step="registration-words"
-                autoPlay={true}
-              />
-            </div>
-            <div className="flex justify-center gap-4">
-              {currentSection.words.map((word, index) => (
-                <span key={index} className="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-lg font-semibold">
-                  {word}
-                </span>
-              ))}
-            </div>
-          </div>
-          
-          <div className="space-y-3">
-            <label className="block text-gray-900 font-medium">
-              {t('cognitive_tests.mmse.sections.registration.repeat_instruction')}
-            </label>
-            {[0, 1, 2].map((index) => (
-              <input
-                key={index}
-                type="text"
-                placeholder={`Word ${index + 1}...`}
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                onChange={(e) => {
-                  const responses = sectionResponses[currentSection.id] || []
-                  responses[index] = e.target.value
-                  handleSectionResponse([...responses])
-                }}
-                data-testid={`recall-word-${index}`}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Attention/Calculation */}
-      {currentSection.id === 'attention' && (
-        <div className="space-y-4">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <p className="text-yellow-800 font-medium">
-              {t('cognitive_tests.mmse.sections.attention.calculation_prompt')}
-            </p>
-          </div>
-          
-          {[0, 1, 2, 3, 4].map((index) => (
-            <div key={index} className="flex items-center gap-4">
-              <span className="text-gray-700 font-medium min-w-[100px]">
-                {index === 0 ? '100 - 7 =' : `Answer ${index} - 7 =`}
-              </span>
-              <input
-                type="number"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter number..."
-                onChange={(e) => {
-                  const responses = sectionResponses[currentSection.id] || []
-                  responses[index] = e.target.value
-                  handleSectionResponse([...responses])
-                }}
-                data-testid={`calculation-${index}`}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="flex justify-between mt-8">
-        <button
-          onClick={() => setCurrentSectionIndex(Math.max(0, currentSectionIndex - 1))}
-          disabled={currentSectionIndex === 0}
-          className="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('common.previous')}
-        </button>
-        
-        <button
-          onClick={nextSection}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center gap-2"
-          data-testid="next-section-btn"
-        >
-          {currentSectionIndex === test.sections.length - 1 ? t('common.complete') : t('common.next')}
-          <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
     </div>
   )

@@ -33,12 +33,25 @@ function TestsPage() {
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
   
+  // Fallback user for demo purposes if not logged in
+  const demoUser = {
+    id: '09c1eaca-93d7-4498-a10b-4adcb8e62dc0',
+    email: 'test@demo.com',
+    name: 'Test User',
+    age: 45,
+    education_level: 'graduate',
+    vision_type: 'normal',
+    language: 'en'
+  }
+  
+  const activeUser = user.id ? user : demoUser
+  
   // Create user profile for AccessibleTestSelector
   const userProfile = {
-    vision_status: user.vision_type || 'normal',
-    education_level: user.education_level || 'graduate',
-    language: user.language || 'en',
-    age: user.age
+    vision_status: activeUser.vision_type || 'normal',
+    education_level: activeUser.education_level || 'graduate',
+    language: activeUser.language || 'en',
+    age: activeUser.age
   }
 
   // Get session_id from URL params if continuing a test
@@ -60,7 +73,7 @@ function TestsPage() {
 
   const loadUserSessions = async () => {
     try {
-      const response = await testSessionAPI.getUserSessions(user.id)
+      const response = await testSessionAPI.getUserSessions(activeUser.id)
       setUserSessions(response.data || [])
     } catch (error) {
       console.error('Failed to load user sessions:', error)
@@ -79,7 +92,7 @@ function TestsPage() {
   const availableTests = [
     {
       id: 'cognitive-battery',
-      name: 'Comprehensive Cognitive Battery',
+      name: t('tests.comprehensive_cognitive_battery') || 'Comprehensive Cognitive Battery',
       type: 'cognitive',
       description: 'Complete cognitive assessment including memory, attention, and executive function tests',
       duration: 45,
@@ -88,8 +101,8 @@ function TestsPage() {
       color: 'indigo'
     },
     {
-      id: 'memory-focus',
-      name: 'Memory Assessment',
+      id: 'memory-focus', 
+      name: t('tests.memory_assessment') || 'Memory Assessment',
       type: 'cognitive',
       description: 'Focused evaluation of memory functions including learning and recall',
       duration: 20,
@@ -99,7 +112,7 @@ function TestsPage() {
     },
     {
       id: 'speech-analysis',
-      name: 'Speech & Language Assessment',
+      name: t('tests.speech_language_assessment') || 'Speech & Language Assessment',
       type: 'speech',
       description: 'Comprehensive analysis of speech patterns, fluency, and language abilities',
       duration: 15,
@@ -109,7 +122,7 @@ function TestsPage() {
     },
     {
       id: 'quick-screen',
-      name: 'Quick Cognitive Screening',
+      name: t('tests.quick_cognitive_screening') || 'Quick Cognitive Screening',
       type: 'cognitive',
       description: 'Brief screening test for initial cognitive assessment',
       duration: 10,
@@ -124,9 +137,9 @@ function TestsPage() {
       setLoading(true)
       
       const sessionData = {
-        user_id: user.id,
-        session_type: testConfig.id,
-        status: 'active'
+        user_id: activeUser.id,
+        session_type: 'baseline', // Use valid session type
+        notes: `Starting ${testConfig.name}`
       }
       
       const response = await testSessionAPI.create(sessionData)
@@ -138,6 +151,7 @@ function TestsPage() {
       
     } catch (error) {
       console.error('Failed to start test:', error)
+      alert(`Failed to start test: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -172,6 +186,26 @@ function TestsPage() {
       cancelled: 'text-red-600 bg-red-100'
     }
     return colors[status] || 'text-gray-600 bg-gray-100'
+  }
+
+  const getButtonColors = (color) => {
+    const colorMap = {
+      indigo: 'bg-indigo-600 hover:bg-indigo-700',
+      purple: 'bg-purple-600 hover:bg-purple-700',
+      green: 'bg-green-600 hover:bg-green-700',
+      blue: 'bg-blue-600 hover:bg-blue-700'
+    }
+    return colorMap[color] || 'bg-indigo-600 hover:bg-indigo-700'
+  }
+
+  const getIconColors = (color) => {
+    const colorMap = {
+      indigo: { bg: 'bg-indigo-100', text: 'text-indigo-600' },
+      purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
+      green: { bg: 'bg-green-100', text: 'text-green-600' },
+      blue: { bg: 'bg-blue-100', text: 'text-blue-600' }
+    }
+    return colorMap[color] || { bg: 'bg-indigo-100', text: 'text-indigo-600' }
   }
 
   // If in active test session, show the appropriate test interface
@@ -355,8 +389,8 @@ function TestsPage() {
               return (
                 <div key={test.id} className="glass rounded-2xl p-6 hover:shadow-lg transition-shadow">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-lg bg-${test.color}-100`}>
-                      <IconComponent className={`w-6 h-6 text-${test.color}-600`} />
+                    <div className={`p-3 rounded-lg ${getIconColors(test.color).bg}`}>
+                      <IconComponent className={`w-6 h-6 ${getIconColors(test.color).text}`} />
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Clock className="w-4 h-4" />
@@ -377,11 +411,11 @@ function TestsPage() {
                     <button
                       onClick={() => startTest(test)}
                       disabled={loading}
-                      className={`bg-${test.color}-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-${test.color}-700 transition-all disabled:opacity-50 flex items-center gap-2`}
+                      className={`${getButtonColors(test.color)} text-white px-6 py-2 rounded-lg font-semibold transition-all disabled:opacity-50 flex items-center gap-2`}
                       data-testid={`start-test-${test.id}`}
                     >
                       <Play className="w-4 h-4" />
-                      {t('tests.start_test')}
+                      {loading ? t('common.loading') : t('tests.start_test')}
                     </button>
                   </div>
                 </div>

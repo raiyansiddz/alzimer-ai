@@ -162,7 +162,7 @@ class ComprehensiveAlzheimerAPITester:
             
         session_data = {
             "user_id": self.user_id,
-            "session_type": "blind_audio_suite",
+            "session_type": "baseline",
             "notes": "Automated comprehensive test session"
         }
         

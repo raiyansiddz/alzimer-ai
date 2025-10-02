@@ -1,86 +1,86 @@
 {
-  "timestamp": "2025-10-02T19:23:10.395789",
+  "timestamp": "2025-10-02T19:40:43.411320",
   "total_tests": 13,
-  "passed_tests": 9,
-  "success_rate": 69.23076923076923,
+  "passed_tests": 13,
+  "success_rate": 100.0,
   "detailed_results": [
     {
       "name": "Health Check",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:22:46.832762"
+      "timestamp": "2025-10-02T19:40:16.715497"
     },
     {
       "name": "User Registration with Accessibility Profile",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:22:52.120173"
+      "timestamp": "2025-10-02T19:40:22.051613"
     },
     {
       "name": "Accessibility Assessment",
-      "success": false,
-      "details": "Expected 200, got 404 - {'detail': 'Not Found'}",
-      "timestamp": "2025-10-02T19:22:52.121945"
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-02T19:40:22.745162"
     },
     {
       "name": "Get Personalized Test Battery",
-      "success": false,
-      "details": "Expected 200, got 404 - {'detail': 'Not Found'}",
-      "timestamp": "2025-10-02T19:22:52.123176"
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-02T19:40:23.430485"
     },
     {
       "name": "Create Test Session",
-      "success": false,
-      "details": "Expected 200, got 500 - Internal Server Error",
-      "timestamp": "2025-10-02T19:22:53.275903"
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-02T19:40:25.268526"
     },
     {
-      "name": "MMSE Audio Endpoints",
-      "success": false,
-      "details": "No session ID available",
-      "timestamp": "2025-10-02T19:22:53.275985"
+      "name": "Get MMSE Results (Empty)",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-10-02T19:40:26.192452"
     },
     {
       "name": "Clinical Accuracy Module",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:22:53.278248"
+      "timestamp": "2025-10-02T19:40:26.193933"
     },
     {
       "name": "Multi-language Support (EN)",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:22:57.391967"
+      "timestamp": "2025-10-02T19:40:30.331861"
     },
     {
       "name": "Multi-language Support (HI)",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:23:01.487548"
+      "timestamp": "2025-10-02T19:40:34.463667"
     },
     {
       "name": "Multi-language Support (ES)",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:23:05.584262"
+      "timestamp": "2025-10-02T19:40:38.593554"
     },
     {
       "name": "Multi-language Support (FR)",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:23:09.711080"
+      "timestamp": "2025-10-02T19:40:42.724685"
     },
     {
       "name": "Voice Assets System",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:23:09.712526"
+      "timestamp": "2025-10-02T19:40:42.726172"
     },
     {
       "name": "Database Integration - User Sessions",
       "success": true,
       "details": "",
-      "timestamp": "2025-10-02T19:23:10.395521"
+      "timestamp": "2025-10-02T19:40:43.411087"
     }
   ]
 }

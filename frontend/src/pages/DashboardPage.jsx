@@ -41,27 +41,21 @@ function DashboardPage() {
     try {
       setLoading(true)
       
-      // Load recent test sessions
-      const sessionsResponse = await testSessionAPI.getUserSessions(user.id)
-      const recentTests = sessionsResponse.data.slice(0, 5) || []
+      // Load all data concurrently for better performance
+      const [sessionsResult, progressResult, reportsResult] = await Promise.allSettled([
+        testSessionAPI.getUserSessions(user.id),
+        progressAPI.getUserProgress(user.id).catch(() => null),
+        reportAPI.getUserReports(user.id).catch(() => null)
+      ])
       
-      // Load progress summary
-      let progressSummary = null
-      try {
-        const progressResponse = await progressAPI.getUserProgress(user.id)
-        progressSummary = progressResponse.data
-      } catch (err) {
-        console.log('No progress data yet')
-      }
+      const recentTests = sessionsResult.status === 'fulfilled' ? 
+        (sessionsResult.value?.data?.slice(0, 5) || []) : []
       
-      // Load recent reports
-      let reports = []
-      try {
-        const reportsResponse = await reportAPI.getUserReports(user.id)
-        reports = reportsResponse.data.slice(0, 3) || []
-      } catch (err) {
-        console.log('No reports yet')
-      }
+      const progressSummary = progressResult.status === 'fulfilled' ? 
+        progressResult.value?.data : null
+      
+      const reports = reportsResult.status === 'fulfilled' ? 
+        (reportsResult.value?.data?.slice(0, 3) || []) : []
 
       setDashboardData({
         recentTests,
@@ -72,6 +66,13 @@ function DashboardPage() {
       
     } catch (error) {
       console.error('Failed to load dashboard data:', error)
+      // Set empty data on error to prevent loading forever
+      setDashboardData({
+        recentTests: [],
+        progressSummary: null,
+        nextAssessment: null,
+        reports: []
+      })
     } finally {
       setLoading(false)
     }
